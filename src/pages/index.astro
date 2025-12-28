@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Profile from "../components/Profile.astro";
 import Links from "../components/Links.astro";
-import myIcon from "../assets/no2ca.svg"
+import myIcon from "../assets/no2ca.svg";
 import Projects from "../components/Projects.astro";
 
 const name = "nonica";
@@ -10,35 +10,37 @@ const description = "低レイヤ / OS開発を中心に学んでいる大学2�
 const interests = ["OS", "Rust", "RISC-V", "x86", "Compiler"];
 
 const links = [
-	{ name: "GitHub", url: "https://github.com/no2ca" },
-	{ name: "Cosense (Scrapbox)", url: "https://cosen.se/nonica" },
-	{ name: "Qiita", url: "https://qiita.com/nonica" },
-	{ name: "Bluesky", url: "https://bsky.app/profile/did:plc:wvwzypmkkewmn3yaedrpzncd" },
-	{ name: "X", url: "https://x.com/no2cax" },
+  { name: "GitHub", url: "https://github.com/no2ca" },
+  { name: "Cosense (Scrapbox)", url: "https://cosen.se/nonica" },
+  { name: "Qiita", url: "https://qiita.com/nonica" },
+  {
+    name: "Bluesky",
+    url: "https://bsky.app/profile/did:plc:wvwzypmkkewmn3yaedrpzncd",
+  },
+  { name: "X", url: "https://x.com/no2cax" },
 ];
 
 const projects = [
-	{
-		name: "nex_os",
-		description: "RISC-Vで動作するOS",
-		url: "https://github.com/no2ca/nex_os",
-	},
-	{
-		name: "lifegame",
-		description: "ベアメタルのx86で動くライフゲーム",
-		url: "https://github.com/no2ca/lifegame",
-	},
-	{
-		name: "nonicc",
-		description: "x86_64をターゲットにしたCコンパイラ",
-		url: "https://github.com/no2ca/nonicc",
-	},
+  {
+    name: "nex_os",
+    description: "RISC-Vで動作するOS",
+    url: "https://github.com/no2ca/nex_os",
+  },
+  {
+    name: "lifegame",
+    description: "ベアメタルのx86で動くライフゲーム",
+    url: "https://github.com/no2ca/lifegame",
+  },
+  {
+    name: "nonicc",
+    description: "x86_64をターゲットにしたCコンパイラ",
+    url: "https://github.com/no2ca/nonicc",
+  },
 ];
-
 ---
 
 <BaseLayout title="nonica | Home Page">
-	<Profile {myIcon} {name} {description} {interests} />
-	<Links {links} />
-	<Projects {projects} />
+  <Profile {myIcon} {name} {description} {interests} />
+  <Links {links} />
+  <Projects {projects} />
 </BaseLayout>

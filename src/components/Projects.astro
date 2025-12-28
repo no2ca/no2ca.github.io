@@ -1,37 +1,46 @@
 ---
 export interface Props {
-    projects: {
-        name: string;
-        description: string;
-        url: string;
-    }[]
+  projects: {
+    name: string;
+    description: string;
+    url: string;
+  }[];
 }
 const { projects } = Astro.props;
 ---
+
 <section>
-	<h2>Projects</h2>
-    <ul>
-        {projects.map(project => (
-            <li>
-                <a href={project.url} target="_blank"><strong>{project.name}</strong><br /></a>
-                {project.description}<br />
-            </li>
-        ))}
-    </ul>
+  <h2>Projects</h2>
+  <ul>
+    {
+      projects.map((project) => (
+        <li>
+          <a href={project.url} target="_blank">
+            <>
+              <strong>{project.name}</strong>
+              <br />
+            </>
+          </a>
+          {project.description}
+          <br />
+        </li>
+      ))
+    }
+  </ul>
 </section>
 
 <style>
-    ul {
-        list-style: none;
-        padding: 0;
-    }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
 
-    .project {
-        margin-bottom: 1.5rem;
-    }
+  .project {
+    margin-bottom: 1.5rem;
+  }
 
-    p {
-        margin: 0.3rem 0;
-        color: #555;
-    }
+  p {
+    margin: 0.3rem 0;
+    color: #555;
+  }
 </style>
