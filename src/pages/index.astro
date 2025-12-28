@@ -1,11 +1,66 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import myIcon from "../assets/no2ca.svg"
+
+const name = "nonica";
+const description = "低レイヤ / OS開発を中心に学んでいる大学生です.";
+const interests = ["OS", "Rust", "RISC-V", "x86", "Compiler"];
+
+const links = [
+	{ name: "GitHub", url: "https://github.com/no2ca" },
+	{ name: "Qiita", url: "https://qiita.com/nonica" },
+	{ name: "Bluesky", url: "https://bsky.app/profile/did:plc:wvwzypmkkewmn3yaedrpzncd" },
+	{ name: "X", url: "https://x.com/no2cax" },
+];
+
+const projects = [
+	{
+		name: "nex_os",
+		description: "RISC-Vで動作するOS",
+		url: "https://github.com/no2ca/nex_os",
+	},
+	{
+		name: "nonicc",
+		description: "x86_64をターゲットにしたCコンパイラ",
+		url: "https://github.com/no2ca/nex_os",
+	},
+];
+
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="icon" type="image/svg+xml" href="/no2ca.svg" />
+	<title>nonica's Homepage</title>
+</head>
+
+<main>
+	<img src={myIcon.src} alt="icon" width="160" />
+
+	<h1>{name}</h1>
+	<p>{description}</p>
+	
+	<h2>Interests</h2>
+	<p>{interests.join(" / ")}</p>
+	
+	<h2>Links</h2>
+	<ul>
+		{links.map(link => (
+			<li>
+				<a href={link.url} target="_blank">{link.name}</a>
+			</li>
+		))}
+	</ul>
+	
+	<h2>Projects</h2>
+	<ul>
+		{projects.map(project => (
+			<li>
+				<a href={project.url} target="_blank"><strong>{project.name}</strong><br /></a>
+				{project.description}<br />
+			</li>
+		))}
+	</ul>
+
+</main>
