@@ -18,18 +18,29 @@ const { title = "nonica | website" } = Astro.props;
 </html>
 
 <style>
+  :root {
+    --bg: #edf1f8;
+    --fg: #1f2937; /* gray-800 */
+    --muted: #6b7280; /* gray-500 */
+    --accent: #4578e7; /* blue-600 */
+    --border: #d4dae4c9; /* gray-200 */
+    --card: #ffffff;
+    --radius: 12px;
+  }
+
   body {
     margin: 0;
     font-family:
       system-ui,
       -apple-system,
       sans-serif;
-    background: #edf1f8;
-    color: #444;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
   }
   .container {
     max-width: 720px;
     margin: 0 auto;
-    padding: 2rem 1.5rem;
+    padding: 3rem 1.5rem;
   }
 </style>

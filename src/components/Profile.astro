@@ -3,18 +3,28 @@ const { myIcon, name, description, interests } = Astro.props;
 ---
 
 <section class="profile">
-  <img src={myIcon.src} alt="icon" width="160" />
+  <img src={myIcon.src} alt="icon" />
 
   <h1>{name}</h1>
-  <p>Last updated: 2025-12 (WIP)</p>
-  <p>{description}</p>
+  <p>Last updated: 2025-12</p>
+  <p class="description">{description}</p>
 
   <h2>Interests</h2>
-  <p>{interests.join(" / ")}</p>
+  <p class="interests">{interests.join(" / ")}</p>
 </section>
 
 <style>
   .profile {
     margin-bottom: 2rem;
+  }
+
+  img {
+    width: 160px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+  }
+
+  h1 {
+    letter-spacing: -0.02em;
   }
 </style>

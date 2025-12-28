@@ -22,7 +22,23 @@ const { links } = Astro.props;
 
 <style>
   ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     list-style: none;
     padding: 0;
+  }
+
+  a {
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--fg);
+    text-decoration: none;
+  }
+
+  a:hover {
+    border-color: var(--accent);
   }
 </style>
