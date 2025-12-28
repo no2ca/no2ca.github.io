@@ -1,7 +1,9 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Profile from "../components/Profile.astro";
+import Links from "../components/Links.astro";
 import myIcon from "../assets/no2ca.svg"
-import Layout from "../layouts/Layout.astro";
+import Projects from "../components/Projects.astro";
 
 const name = "nonica";
 const description = "低レイヤ / OS開発を中心に学んでいる大学2年生です.";
@@ -35,35 +37,8 @@ const projects = [
 
 ---
 
-<Layout title="nonica | Home Page">
-	<main>
-		<img src={myIcon.src} alt="icon" width="160" />
-
-		<h1>{name}</h1>
-		<p>Last updated: 2025-12 (WIP) </p>
-		<p>{description}</p>
-
-		<h2>Interests</h2>
-		<p>{interests.join(" / ")}</p>
-		
-		<h2>Links</h2>
-		<ul>
-			{links.map(link => (
-				<li>
-					<a href={link.url} target="_blank">{link.name}</a>
-				</li>
-			))}
-		</ul>
-		
-		<h2>Projects</h2>
-		<ul>
-			{projects.map(project => (
-				<li>
-					<a href={project.url} target="_blank"><strong>{project.name}</strong><br /></a>
-					{project.description}<br />
-				</li>
-			))}
-		</ul>
-
-	</main>
-</Layout>
+<BaseLayout title="nonica | Home Page">
+	<Profile {myIcon} {name} {description} {interests} />
+	<Links {links} />
+	<Projects {projects} />
+</BaseLayout>
