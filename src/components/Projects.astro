@@ -14,7 +14,7 @@ const { projects } = Astro.props;
   <ul>
     {
       projects.map((project) => (
-        <li>
+        <li class="project">
           <a href={project.url} target="_blank">
             <>
               <strong>{project.name}</strong>
@@ -33,14 +33,17 @@ const { projects } = Astro.props;
   ul {
     list-style: none;
     padding: 0;
+    display: grid;
+    gap: 1rem;
   }
 
   .project {
-    margin-bottom: 1.5rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
   }
 
-  p {
-    margin: 0.3rem 0;
-    color: #555;
+  .project a {
+    color: var(--fg);
   }
 </style>
