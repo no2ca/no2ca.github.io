@@ -1,30 +1,82 @@
 ---
-const { myIcon, name, description, interests } = Astro.props;
+export interface Props {
+  myIcon: any;
+  name: any;
+  description: any;
+}
+const { myIcon, name, description } = Astro.props;
 ---
 
-<section class="profile">
-  <img src={myIcon.src} alt="icon" />
+<section class="profile-card">
+  <div class="avatar">
+    <img src={myIcon.src} alt="Profile icon" />
+  </div>
 
-  <h1>{name}</h1>
-  <p>Last updated: 2025-12</p>
-  <p class="description">{description}</p>
+  <div class="content">
+    <div class="header">
+      <div>
+        <h1>{name}</h1>
+        <p class="updated">Last updated: 2025-12</p>
+      </div>
+    </div>
 
-  <h2>Interests</h2>
-  <p class="interests">{interests.join(" / ")}</p>
+    <p class="description">{description}</p>
+  </div>
 </section>
 
 <style>
-  .profile {
+  .profile-card {
+    gap: 1.25rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
     margin-bottom: 2rem;
+    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.06);
+  }
+  
+  .avatar {
+    justify-self: center;
   }
 
-  img {
-    width: 160px;
+  .avatar img {
+    width: 144px;
+    height: 144px;
     border-radius: 50%;
     border: 1px solid var(--border);
+    object-fit: cover;
   }
 
-  h1 {
-    letter-spacing: -0.02em;
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .header h1 {
+    margin: 0;
+    letter-spacing: -0.01em;
+    font-size: 1.8rem;
+  }
+
+  .updated {
+    margin: 0.25rem 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .description {
+    margin: 0.2rem 0 0.6rem;
+  }
+
+  .interests h2 {
+    margin: 0 0 0.35rem;
+    font-size: 1.05rem;
+  }
+  
+  @media screen and (max-width: 680px) {
+    .avatar img {
+      width: 128px;
+      height: 128px;
+    }
   }
 </style>

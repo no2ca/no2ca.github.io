@@ -1,0 +1,15 @@
+---
+export interface Props {
+  interests: string[];
+}
+const { interests } = Astro.props;
+---
+
+<section>
+  <div class="interests">
+    <h2>Interests</h2>
+    <div class="tags">
+      {interests.join(" / ")}
+    </div>
+  </div>
+</section>
