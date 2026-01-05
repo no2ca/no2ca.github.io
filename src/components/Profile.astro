@@ -26,6 +26,10 @@ const { myIcon, name, description } = Astro.props;
 
 <style>
   .profile-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    text-align: center;
     gap: 1.25rem;
     padding: 1.5rem;
     border: 1px solid var(--border);
@@ -35,6 +39,8 @@ const { myIcon, name, description } = Astro.props;
   }
 
   .avatar {
+    display: flex;
+    justify-content: center;
     justify-self: center;
   }
 
@@ -74,6 +80,15 @@ const { myIcon, name, description } = Astro.props;
   }
 
   @media screen and (max-width: 680px) {
+    .profile-card {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .content {
+      align-items: center;
+    }
+
     .avatar img {
       width: 128px;
       height: 128px;
