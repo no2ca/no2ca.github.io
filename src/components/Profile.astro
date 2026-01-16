@@ -2,9 +2,8 @@
 export interface Props {
   myIcon: any;
   name: any;
-  description: any;
 }
-const { myIcon, name, description } = Astro.props;
+const { myIcon, name } = Astro.props;
 ---
 
 <section class="profile-card">
@@ -16,11 +15,9 @@ const { myIcon, name, description } = Astro.props;
     <div class="header">
       <div>
         <h1>{name}</h1>
-        <p class="updated">Last updated: 2025-12</p>
+        <p class="muted">Last updated: 2025-12</p>
       </div>
     </div>
-
-    <p class="description">{description}</p>
   </div>
 </section>
 
@@ -64,7 +61,7 @@ const { myIcon, name, description } = Astro.props;
     font-size: 1.8rem;
   }
 
-  .updated {
+  .muted {
     margin: 0.25rem 0 0;
     color: var(--muted);
     font-size: 0.9rem;

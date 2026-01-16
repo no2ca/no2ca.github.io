@@ -1,11 +1,16 @@
 ---
 export interface Props {
+  description: string;
   interests: string[];
 }
-const { interests } = Astro.props;
+const { description, interests } = Astro.props;
 ---
 
 <section>
+  <div class="about">
+    <h2>About</h2>
+    <p>{description}</p>
+  </div>
   <div class="interests">
     <h2>Interests</h2>
     <div class="tags">

@@ -7,7 +7,9 @@ import myIcon from "../assets/no2ca.svg";
 import Projects from "../components/Projects.astro";
 
 const name = "nonica";
-const description = "低レイヤ / OS開発を中心に学んでいる大学2年生です.";
+const description = `
+低レイヤ / OS開発を中心に学んでいる大学2年生です.
+`;
 const interests = ["OS", "Rust", "RISC-V", "x86", "Compiler"];
 
 const links = [
@@ -42,8 +44,8 @@ const projects = [
 ---
 
 <BaseLayout title="nonica | Home Page">
-  <Profile {myIcon} {name} {description} />
-  <Interests {interests} />
+  <Profile {myIcon} {name} />
+  <Interests {description} {interests} />
   <Links {links} />
   <Projects {projects} />
 </BaseLayout>
