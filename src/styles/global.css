@@ -5,7 +5,7 @@
 }
 
 ::selection {
-  background: rgba(24, 87, 203, 0.16);
+  background: rgba(146, 91, 134, 0.2);
 }
 
 section + section {
@@ -18,10 +18,7 @@ h3 {
   margin: 0;
   color: var(--fg);
   font-family:
-    "Zen Kaku Gothic New",
-    "Noto Sans JP",
-    "Hiragino Sans",
-    "Yu Gothic",
+    "Zen Kaku Gothic New", "Noto Sans JP", "Hiragino Sans", "Yu Gothic",
     sans-serif;
   letter-spacing: 0.02em;
 }
