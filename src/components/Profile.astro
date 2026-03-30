@@ -2,93 +2,78 @@
 export interface Props {
   myIcon: any;
   name: any;
+  update: any;
 }
-const { myIcon, name } = Astro.props;
+const { myIcon, name, update } = Astro.props;
 ---
 
-<section class="profile-card">
+<section class="profile">
   <div class="avatar">
     <img src={myIcon.src} alt="Profile icon" />
   </div>
 
   <div class="content">
-    <div class="header">
-      <div>
-        <h1>{name}</h1>
-        <p class="muted">Last updated: 2026-01</p>
-      </div>
-    </div>
+    <h1>{name}</h1>
+    <p class="muted">Last updated: {update}</p>
   </div>
 </section>
 
 <style>
-  .profile-card {
-    display: grid;
-    grid-template-columns: 1fr;
-    align-items: center;
-    text-align: center;
-    gap: 1.25rem;
-    padding: 1.5rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 2rem;
-    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.06);
+  .profile {
+    gap: 1rem;
+    padding-bottom: 1.8rem;
+    border-bottom: 1px solid var(--line);
   }
 
   .avatar {
     display: flex;
-    justify-content: center;
-    justify-self: center;
+    justify-self: start;
   }
 
   .avatar img {
-    width: 144px;
-    height: 144px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
+    width: 100px;
+    height: 100px;
+    border: 1px solid var(--line);
     object-fit: cover;
   }
 
   .content {
+    margin-top: 1rem;
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 1rem;
   }
 
-  .header h1 {
-    margin: 0;
-    letter-spacing: -0.01em;
-    font-size: 1.8rem;
+  h1 {
+    font-size: clamp(1.75rem, 5vw, 2.20rem);
+    font-weight: 400;
+    line-height: 1.18;
+    letter-spacing: 0.015em;
   }
 
   .muted {
-    margin: 0.25rem 0 0;
+    margin: 0;
     color: var(--muted);
-    font-size: 0.9rem;
-  }
-
-  .description {
-    margin: 0.2rem 0 0.6rem;
-  }
-
-  .interests h2 {
-    margin: 0 0 0.35rem;
-    font-size: 1.05rem;
+    font-size: 0.84rem;
+    font-weight: 300;
+    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   }
 
   @media screen and (max-width: 680px) {
-    .profile-card {
+    .profile {
       grid-template-columns: 1fr;
       text-align: center;
+      gap: 0.9rem;
     }
 
     .content {
-      align-items: center;
+      align-items: baseline;
     }
 
     .avatar img {
-      width: 128px;
-      height: 128px;
+      width: 96px;
+      height: 96px;
     }
   }
 </style>

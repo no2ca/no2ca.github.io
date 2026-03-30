@@ -7,12 +7,12 @@ const { links } = Astro.props;
 
 <section>
   <h2>Links</h2>
-  <ul>
+  <ul class="link-list">
     {
       links.map((link) => (
         <li>
-          <a href={link.url} target="_blank">
-            {link.name}
+          <a href={link.url} target="_blank" rel="noreferrer">
+            {link.name}<span aria-hidden="true"> ↗</span>
           </a>
         </li>
       ))
@@ -21,24 +21,39 @@ const { links } = Astro.props;
 </section>
 
 <style>
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem 0.4rem;
+  .link-list {
+    margin: 0;
     list-style: none;
     padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem 1.4rem;
   }
 
   a {
-    padding: 0.4rem 0.7rem;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    width: fit-content;
+    padding: 0.16rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+    font-weight: 300;
+    letter-spacing: 0.015em;
     color: var(--fg);
     text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
 
   a:hover {
+    color: var(--accent);
     border-color: var(--accent);
+    transform: translateX(1px);
+  }
+
+  @media screen and (max-width: 620px) {
+    .link-list {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

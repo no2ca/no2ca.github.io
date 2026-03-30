@@ -7,6 +7,7 @@ import myIcon from "../assets/no2ca.svg";
 import Projects from "../components/Projects.astro";
 
 const name = "nonica";
+const update = "2026-03-30";
 const description = `
 低レイヤ / OS開発を中心に学んでいる大学2年生です.
 `;
@@ -43,7 +44,7 @@ const projects = [
 ---
 
 <BaseLayout title="nonica | Home Page">
-  <Profile {myIcon} {name} />
+  <Profile {myIcon} {name} {update} />
   <Interests {description} {interests} />
   <Links {links} />
   <Projects {projects} />

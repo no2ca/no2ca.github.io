@@ -6,15 +6,36 @@ export interface Props {
 const { description, interests } = Astro.props;
 ---
 
-<section>
+<section class="about-block">
   <div class="about">
     <h2>About</h2>
-    <p>{description}</p>
+    <p class="description">{description}</p>
   </div>
   <div class="interests">
     <h2>Interests</h2>
-    <div class="tags">
+    <p class="tags">
       {interests.join(" / ")}
-    </div>
+    </p>
   </div>
 </section>
+
+<style>
+  .about-block {
+    display: grid;
+    gap: 1.45rem;
+  }
+
+  .description {
+    max-width: 56ch;
+    font-weight: 300;
+  }
+
+  .tags {
+    color: var(--muted);
+    font-size: 0.88rem;
+    font-weight: 300;
+    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    letter-spacing: 0.022em;
+    word-break: break-word;
+  }
+</style>
