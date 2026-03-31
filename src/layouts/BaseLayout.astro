@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 const { title = "nonica | website" } = Astro.props;
+const gaId = import.meta.env.PUBLIC_GA_ID?.trim();
 ---
 
 <!doctype html>
@@ -27,6 +28,24 @@ const { title = "nonica | website" } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
+    {
+      gaId && (
+        <>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+          ></script>
+          <script is:inline define:vars={{ gaId }}>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+            gtag("config", gaId);
+          </script>
+        </>
+      )
+    }
   </head>
 
   <body>
