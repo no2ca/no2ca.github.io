@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 const { title = "nonica | website", bodyClass = "" } = Astro.props;
-const gaId = import.meta.env.PUBLIC_GA_ID?.trim();
+const gaId = (import.meta.env.PUBLIC_GA_ID?.trim() || "G-F3YRJ3XXWK").trim();
 ---
 
 <!doctype html>
