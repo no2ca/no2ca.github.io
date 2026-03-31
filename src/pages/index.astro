@@ -64,6 +64,10 @@ const projects = [
     animation-delay: var(--reveal-delay, 0ms);
   }
 
+  .reveal + .reveal {
+    margin-top: clamp(1.4rem, 3vw, 2rem);
+  }
+
   @keyframes rise {
     from {
       opacity: 0;
