@@ -1,0 +1,437 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const profile = {
+  name: "Taisei Ono",
+  handle: "nonica / no2ca",
+  role: "Systems & Low-level Software",
+  location: "Yokohama, Japan",
+  date: "2026-03-31",
+};
+
+const about = [
+  "慶應義塾大学 環境情報学部に在籍し、低レイヤソフトウェア開発を中心に学んでいます。",
+  "主な関心領域は OS、コンパイラ、コンピュータアーキテクチャです。",
+  "Rust と C を使って、実装しながら内部構造を理解するスタイルで開発しています。",
+  "現在はAArch64向けハイパーバイザを継続開発中です。",
+];
+
+const skillGroups = [
+  {
+    title: "Languages",
+    items: ["Rust", "C", "C++"],
+  },
+  {
+    title: "Systems",
+    items: ["Operating Systems", "RV64", "x86-64", "AArch64", "Hypervisor"],
+  },
+  {
+    title: "Tools",
+    items: ["Git", "Linux", "QEMU", "Docker"],
+  },
+];
+
+const projects = [
+  {
+    name: "RV64 Operating System",
+    what: "RV64 上で動作する最小カーネルを実装。仮想メモリ、ページング、トラップ処理、ELF ローダ、システムコール（create/yield/exit）を構築。",
+    tech: ["Rust", "RV64", "QEMU", "Kernel Development"],
+    github: "https://github.com/no2ca/nex_os",
+    demo: "",
+  },
+  {
+    name: "C Subset Compiler",
+    what: "x86-64 Linux（SysV ABI, ELF）向け C サブセットコンパイラを実装。lexer / parser / AST / IR / 線形スキャンレジスタ割当 / Intel 構文コード生成まで対応。",
+    tech: ["Rust", "x86-64", "Linux", "Compiler"],
+    github: "https://github.com/no2ca/nonicc",
+    demo: "",
+  },
+  {
+    name: "x86 Bootloader & Game of Life Runtime",
+    what: "独自 x86 ブートローダを開発し、OS 非依存で Rust 製ライフゲームをロード・実行。メモリレイアウトとバイナリローディングを自前で構成。",
+    tech: ["Rust", "x86 Assembly", "Bare Metal"],
+    github: "https://github.com/no2ca/lifegame",
+    demo: "",
+  },
+];
+
+const experiences = [
+  {
+    period: "2025 - Present",
+    title: "個人開発（システムソフトウェア）",
+    detail: "OS・コンパイラ・ベアメタル実装を継続。GitHub で開発履歴と成果物を公開。",
+  },
+  {
+    period: "2025年5月 - 2025年12月",
+    title: "株式会社G-VIS",
+    detail: "AIエージェントを活用したWebアプリケーションのPoC開発。",
+  },
+];
+
+const education = {
+  school: "慶應義塾大学",
+  faculty: "環境情報学部 学士課程",
+  expected: "2028年3月卒業予定",
+  courses: [
+    "Computer Architecture",
+    "Operating Systems",
+    "Software Architecture",
+  ],
+};
+---
+
+<BaseLayout title="nonica | Portfolio">
+  <div class="portfolio">
+    <header class="hero reveal">
+      <p class="eyebrow">PORTFOLIO</p>
+      <h1>{profile.name}</h1>
+      <div class="meta">
+        <span>{profile.handle}</span>
+        <span>{profile.role}</span>
+        <span>{profile.location}</span>
+      </div>
+      <div class="meta">
+        <span>Last Updated: {profile.date}</span>
+      </div>
+    </header>
+
+    <section class="panel reveal">
+      <h2>About</h2>
+      {about.map((line) => <p class="about-line">{line}</p>)}
+    </section>
+
+    <section class="panel reveal">
+      <h2>Skills</h2>
+      <div class="skill-groups">
+        {
+          skillGroups.map((group) => (
+            <section class="skill-group">
+              <p class="group-title">{group.title}</p>
+              <ul class="skills">
+                {group.items.map((item) => <li class="skill">{item}</li>)}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="panel reveal">
+      <h2>Projects</h2>
+      <ul class="projects">
+        {
+          projects.map((project) => (
+            <li class="project">
+              <h3>{project.name}</h3>
+              <p class="project-what">{project.what}</p>
+              <p class="project-label">Tech</p>
+              <ul class="tech-list">
+                {project.tech.map((tech) => <li>{tech}</li>)}
+              </ul>
+              <p class="project-label">Links</p>
+              <div class="project-links">
+                <a href={project.github} target="_blank" rel="noreferrer">
+                  GitHub ↗
+                </a>
+                {
+                  project.demo && (
+                    <a href={project.demo} target="_blank" rel="noreferrer">
+                      Demo ↗
+                    </a>
+                  )
+                }
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="panel reveal">
+      <h2>Experience</h2>
+      <ul class="history">
+        {
+          experiences.map((item) => (
+            <li>
+              <p class="period">{item.period}</p>
+              <p class="history-title">{item.title}</p>
+              <p class="history-detail">{item.detail}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="panel reveal">
+      <h2>Education</h2>
+      <p>{education.school}</p>
+      <p>{education.faculty}</p>
+      <p class="muted">{education.expected}</p>
+      <p class="project-label">Relevant Coursework</p>
+      <ul class="courses">
+        {education.courses.map((course) => <li>{course}</li>)}
+      </ul>
+    </section>
+
+    <section class="panel reveal">
+      <h2>Contact</h2>
+      <ul class="contact">
+        <li>
+          <span class="project-label">Email</span>
+          <p class="contact-text">taiseiono6[@]gmail.com</p>
+        </li>
+        <li>
+          <span class="project-label">GitHub</span>
+          <p>
+            <a href="https://github.com/no2ca" target="_blank" rel="noreferrer">
+              github.com/no2ca ↗
+            </a>
+          </p>
+        </li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .portfolio {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .hero {
+    padding: 1.2rem 0 1.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  h1 {
+    margin-top: 0.3rem;
+    font-size: clamp(1.9rem, 5.5vw, 2.7rem);
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
+  .meta {
+    margin-top: 0.8rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    color: var(--muted);
+    font-size: 0.86rem;
+  }
+
+  .panel {
+    border: 1px solid var(--line);
+    background: color-mix(in oklab, var(--bg-soft) 84%, transparent);
+    padding: 1rem;
+  }
+
+  .panel h2 {
+    margin-bottom: 0.9rem;
+  }
+
+  .about-line + .about-line {
+    margin-top: 0.55rem;
+  }
+
+  .skill-groups,
+  .projects,
+  .history,
+  .courses,
+  .contact {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .skill-groups {
+    display: grid;
+    gap: 0.95rem;
+  }
+
+  .group-title {
+    margin-bottom: 0.55rem;
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .skills {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .skill {
+    display: inline-block;
+    border: 1px solid var(--line);
+    padding: 0.25rem 0.6rem;
+    font-size: 0.86rem;
+  }
+
+  .projects {
+    display: grid;
+    gap: 0.95rem;
+  }
+
+  .project {
+    border-top: 1px solid var(--line);
+    padding-top: 0.95rem;
+  }
+
+  .project:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  .project-what {
+    margin-top: 0.4rem;
+    color: var(--muted);
+    font-size: 0.93rem;
+  }
+
+  .project-label {
+    margin-top: 0.56rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tech-list {
+    margin: 0.3rem 0 0;
+    padding-left: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.2rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  .project-links {
+    margin-top: 0.32rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+  }
+
+  a {
+    color: var(--fg);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .muted {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  .history {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .history-title {
+    margin-top: 0.1rem;
+    font-weight: 400;
+  }
+
+  .period {
+    color: var(--muted);
+    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    font-size: 0.8rem;
+  }
+
+  .history-detail {
+    margin-top: 0.2rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .courses {
+    margin-top: 0.35rem;
+    padding-left: 1rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    display: grid;
+    gap: 0.16rem;
+  }
+
+  .contact {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .contact-text {
+    margin: 0.2rem 0 0;
+  }
+
+  .reveal {
+    animation: rise 420ms ease both;
+  }
+
+  .panel.reveal:nth-of-type(2) {
+    animation-delay: 70ms;
+  }
+
+  .panel.reveal:nth-of-type(3) {
+    animation-delay: 120ms;
+  }
+
+  .panel.reveal:nth-of-type(4) {
+    animation-delay: 170ms;
+  }
+
+  .panel.reveal:nth-of-type(5) {
+    animation-delay: 220ms;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .tech-list {
+      display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      animation: none;
+    }
+  }
+</style>
