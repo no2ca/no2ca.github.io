@@ -44,8 +44,40 @@ const projects = [
 ---
 
 <BaseLayout title="nonica | Home Page">
-  <Profile {myIcon} {name} {update} />
-  <Interests {description} {interests} />
-  <Links {links} />
-  <Projects {projects} />
+  <div class="reveal" style="--reveal-delay: 0ms;">
+    <Profile {myIcon} {name} {update} />
+  </div>
+  <div class="reveal" style="--reveal-delay: 70ms;">
+    <Interests {description} {interests} />
+  </div>
+  <div class="reveal" style="--reveal-delay: 120ms;">
+    <Links {links} />
+  </div>
+  <div class="reveal" style="--reveal-delay: 170ms;">
+    <Projects {projects} />
+  </div>
 </BaseLayout>
+
+<style>
+  .reveal {
+    animation: rise 420ms ease both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      animation: none;
+    }
+  }
+</style>
