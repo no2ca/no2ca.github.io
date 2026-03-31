@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="nonica | プライバシーポリシー" bodyClass="privacy-policy-page">
+  <article class="policy">
+    <h1>プライバシーポリシー</h1>
+    <p>
+      当サイトでは、アクセス解析のためにGoogle Analyticsを使用しています。Google
+      Analyticsはデータ収集のためにCookieを使用します。このデータは匿名で収集されており、個人を特定するものではありません。
+    </p>
+    <p>
+      この機能はCookieを無効にすることで収集を拒否することができます。詳しくは
+      <a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noreferrer">
+        Googleのプライバシーポリシー
+      </a>
+      をご確認ください。
+    </p>
+  </article>
+</BaseLayout>
+
+<style>
+  :global(body.privacy-policy-page) {
+    background: var(--bg);
+  }
+
+  .policy {
+    max-width: 54ch;
+    margin: 0 auto;
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  h1 {
+    font-size: clamp(1.32rem, 3.5vw, 1.72rem);
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+  }
+
+  p {
+    color: var(--fg);
+    line-height: 1.9;
+  }
+
+  a {
+    color: var(--accent);
+  }
+</style>
