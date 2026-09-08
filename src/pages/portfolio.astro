@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Row from "../components/Row.astro";
+import TagList from "../components/TagList.astro";
 
 const profile = {
   name: "Taisei Ono",
@@ -17,18 +19,12 @@ const about = [
 ];
 
 const skillGroups = [
-  {
-    title: "Languages",
-    items: ["Rust", "C", "C++"],
-  },
+  { title: "Languages", items: ["Rust", "C", "C++"] },
   {
     title: "Systems",
     items: ["Operating Systems", "RV64", "x86-64", "AArch64", "Hypervisor"],
   },
-  {
-    title: "Tools",
-    items: ["Git", "Linux", "QEMU", "Docker"],
-  },
+  { title: "Tools", items: ["Git", "Linux", "QEMU", "Docker"] },
 ];
 
 const projects = [
@@ -65,7 +61,8 @@ const experiences = [
   {
     period: "2025 - Present",
     title: "個人開発（システムソフトウェア）",
-    detail: "OS・コンパイラ・ベアメタル実装を継続。GitHub で開発履歴と成果物を公開。",
+    detail:
+      "OS・コンパイラ・ベアメタル実装を継続。GitHub で開発履歴と成果物を公開。",
   },
   {
     period: "2025年5月 - 2025年12月",
@@ -84,267 +81,199 @@ const education = {
     "Software Architecture",
   ],
 };
+
+const description = `${profile.name}（${profile.handle}）のポートフォリオ。OS・コンパイラ・ベアメタル実装を中心としたシステムソフトウェア開発の経歴と成果物。`;
 ---
 
-<BaseLayout title="nonica | Portfolio">
-  <div class="portfolio">
-    <header class="hero reveal">
-      <p class="eyebrow">PORTFOLIO</p>
+<BaseLayout title="nonica | Portfolio" {description}>
+  <header class="hero">
+    <p class="label hero-label">Portfolio</p>
+    <div class="hero-body">
       <h1>{profile.name}</h1>
       <div class="meta">
         <span>{profile.handle}</span>
         <span>{profile.role}</span>
         <span>{profile.location}</span>
       </div>
-      <div class="meta">
-        <span>Last Updated: {profile.date}</span>
-      </div>
-    </header>
+      <p class="label hero-date">Last updated {profile.date}</p>
+    </div>
+  </header>
 
-    <section class="panel reveal">
-      <h2>About</h2>
-      {about.map((line) => <p class="about-line">{line}</p>)}
-    </section>
+  <Row label="About" delay={70}>
+    {about.map((line) => <p class="about-line">{line}</p>)}
+  </Row>
 
-    <section class="panel reveal">
-      <h2>Skills</h2>
-      <div class="skill-groups">
-        {
-          skillGroups.map((group) => (
-            <section class="skill-group">
-              <p class="group-title">{group.title}</p>
-              <ul class="skills">
-                {group.items.map((item) => <li class="skill">{item}</li>)}
-              </ul>
-            </section>
-          ))
-        }
-      </div>
-    </section>
+  <Row label="Skills" delay={110}>
+    <div class="skill-groups">
+      {
+        skillGroups.map((group) => (
+          <div class="skill-group">
+            <p class="label group-title">{group.title}</p>
+            <TagList items={group.items} />
+          </div>
+        ))
+      }
+    </div>
+  </Row>
 
-    <section class="panel reveal">
-      <h2>Projects</h2>
-      <ul class="projects">
-        {
-          projects.map((project) => (
-            <li class="project">
-              <h3>{project.name}</h3>
-              <p class="project-what">{project.what}</p>
-              <p class="project-label">Tech</p>
-              <ul class="tech-list">
-                {project.tech.map((tech) => <li>{tech}</li>)}
-              </ul>
-              <p class="project-label">Links</p>
-              <div class="project-links">
-                <a href={project.github} target="_blank" rel="noreferrer">
-                  GitHub ↗
+  <Row label="Projects" delay={150}>
+    <ul class="projects">
+      {
+        projects.map((project) => (
+          <li class="project">
+            <h2>{project.name}</h2>
+            <p class="project-what">{project.what}</p>
+            <TagList items={project.tech} />
+            <div class="project-links">
+              <a href={project.github} target="_blank" rel="noreferrer">
+                GitHub<span aria-hidden="true"> ↗</span>
+              </a>
+              {project.demo && (
+                <a href={project.demo} target="_blank" rel="noreferrer">
+                  Demo<span aria-hidden="true"> ↗</span>
                 </a>
-                {
-                  project.demo && (
-                    <a href={project.demo} target="_blank" rel="noreferrer">
-                      Demo ↗
-                    </a>
-                  )
-                }
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </Row>
 
-    <section class="panel reveal">
-      <h2>Experience</h2>
-      <ul class="history">
-        {
-          experiences.map((item) => (
-            <li>
-              <p class="period">{item.period}</p>
-              <p class="history-title">{item.title}</p>
-              <p class="history-detail">{item.detail}</p>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
+  <Row label="Experience" delay={190}>
+    <ul class="history">
+      {
+        experiences.map((item) => (
+          <li>
+            <p class="label period">{item.period}</p>
+            <p class="history-title">{item.title}</p>
+            <p class="history-detail">{item.detail}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Row>
 
-    <section class="panel reveal">
-      <h2>Education</h2>
-      <p>{education.school}</p>
-      <p>{education.faculty}</p>
-      <p class="muted">{education.expected}</p>
-      <p class="project-label">Relevant Coursework</p>
-      <ul class="courses">
-        {education.courses.map((course) => <li>{course}</li>)}
-      </ul>
-    </section>
+  <Row label="Education" delay={230}>
+    <p>{education.school}</p>
+    <p>{education.faculty}</p>
+    <p class="muted">{education.expected}</p>
+    <p class="label group-title coursework">Relevant Coursework</p>
+    <TagList items={education.courses} />
+  </Row>
 
-    <section class="panel reveal">
-      <h2>Contact</h2>
-      <ul class="contact">
-        <li>
-          <span class="project-label">Email</span>
-          <p class="contact-text">taiseiono6[@]gmail.com</p>
-        </li>
-        <li>
-          <span class="project-label">GitHub</span>
-          <p>
-            <a href="https://github.com/no2ca" target="_blank" rel="noreferrer">
-              github.com/no2ca ↗
-            </a>
-          </p>
-        </li>
-      </ul>
-    </section>
-  </div>
+  <Row label="Contact" delay={270}>
+    <ul class="contact">
+      <li>
+        <p class="label">Email</p>
+        <p>taiseiono6[@]gmail.com</p>
+      </li>
+      <li>
+        <p class="label">GitHub</p>
+        <p>
+          <a href="https://github.com/no2ca" target="_blank" rel="noreferrer">
+            github.com/no2ca<span aria-hidden="true"> ↗</span>
+          </a>
+        </p>
+      </li>
+    </ul>
+  </Row>
 </BaseLayout>
 
 <style>
-  .portfolio {
-    display: grid;
-    gap: 1.2rem;
-  }
-
+  /* Mirrors the Row grid so the eyebrow lines up with the labels below. */
   .hero {
-    padding: 1.2rem 0 1.6rem;
-    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    gap: 0 var(--sp-6);
+    align-items: start;
+    padding-block: var(--sp-8);
+    animation: rise 420ms ease both;
   }
 
-  .eyebrow {
-    font-size: 0.72rem;
-    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
-    letter-spacing: 0.1em;
-    color: var(--muted);
+  .hero-label {
+    line-height: var(--lh-body);
   }
 
   h1 {
-    margin-top: 0.3rem;
     font-size: clamp(1.9rem, 5.5vw, 2.7rem);
     font-weight: 500;
     line-height: 1.15;
   }
 
   .meta {
-    margin-top: 0.8rem;
+    margin-top: var(--sp-3);
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1rem;
+    gap: var(--sp-2) var(--sp-4);
     color: var(--muted);
-    font-size: 0.86rem;
+    font-size: var(--fs-meta);
+    line-height: 1.6;
   }
 
-  .panel {
-    border: 1px solid var(--line);
-    background: color-mix(in oklab, var(--bg-soft) 84%, transparent);
-    padding: 1rem;
-  }
-
-  .panel h2 {
-    margin-bottom: 0.9rem;
+  .hero-date {
+    margin-top: var(--sp-2);
   }
 
   .about-line + .about-line {
-    margin-top: 0.55rem;
-  }
-
-  .skill-groups,
-  .projects,
-  .history,
-  .courses,
-  .contact {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    margin-top: var(--sp-2);
   }
 
   .skill-groups {
     display: grid;
-    gap: 0.95rem;
+    gap: var(--sp-4);
   }
 
   .group-title {
-    margin-bottom: 0.55rem;
-    color: var(--muted);
-    font-size: 0.74rem;
-    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    margin-bottom: var(--sp-2);
   }
 
-  .skills {
+  .projects,
+  .history,
+  .contact {
     margin: 0;
     padding: 0;
     list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-  }
-
-  .skill {
-    display: inline-block;
-    border: 1px solid var(--line);
-    padding: 0.25rem 0.6rem;
-    font-size: 0.86rem;
+    display: grid;
   }
 
   .projects {
-    display: grid;
-    gap: 0.95rem;
+    gap: var(--sp-4);
   }
 
-  .project {
-    border-top: 1px solid var(--line);
-    padding-top: 0.95rem;
+  .project + .project {
+    padding-top: var(--sp-4);
+    border-top: var(--rule);
   }
 
-  .project:first-child {
-    border-top: 0;
-    padding-top: 0;
-  }
-
-  h3 {
+  h2 {
     font-size: 1.1rem;
     font-weight: 400;
     line-height: 1.4;
   }
 
   .project-what {
-    margin-top: 0.4rem;
+    margin: 0.3rem 0 var(--sp-3);
     color: var(--muted);
-    font-size: 0.93rem;
-  }
-
-  .project-label {
-    margin-top: 0.56rem;
-    color: var(--muted);
-    font-size: 0.72rem;
-    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .tech-list {
-    margin: 0.3rem 0 0;
-    padding-left: 1rem;
-    flex-wrap: wrap;
-    gap: 0.35rem 1.2rem;
-    color: var(--muted);
-    font-size: 0.88rem;
+    font-size: var(--fs-lead);
   }
 
   .project-links {
-    margin-top: 0.32rem;
+    margin-top: var(--sp-3);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem 1rem;
+    gap: var(--sp-2) var(--sp-4);
+    font-size: var(--fs-meta);
   }
 
   a {
     color: var(--fg);
     text-decoration: none;
-    border-bottom: 1px solid var(--line);
-    transition: color 0.2s ease, border-color 0.2s ease;
+    border-bottom: var(--rule);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
   }
 
   a:hover {
@@ -354,67 +283,29 @@ const education = {
 
   .muted {
     color: var(--muted);
-    font-size: 0.88rem;
+    font-size: var(--fs-meta);
   }
 
   .history {
-    display: grid;
-    gap: 0.85rem;
+    gap: var(--sp-4);
   }
 
   .history-title {
-    margin-top: 0.1rem;
     font-weight: 400;
-  }
-
-  .period {
-    color: var(--muted);
-    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
-    font-size: 0.8rem;
   }
 
   .history-detail {
     margin-top: 0.2rem;
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: var(--fs-lead);
   }
 
-  .courses {
-    margin-top: 0.35rem;
-    padding-left: 1rem;
-    color: var(--muted);
-    font-size: 0.9rem;
-    display: grid;
-    gap: 0.16rem;
+  .coursework {
+    margin-top: var(--sp-3);
   }
 
   .contact {
-    display: grid;
-    gap: 0.8rem;
-  }
-
-  .contact-text {
-    margin: 0.2rem 0 0;
-  }
-
-  .reveal {
-    animation: rise 420ms ease both;
-  }
-
-  .panel.reveal:nth-of-type(2) {
-    animation-delay: 70ms;
-  }
-
-  .panel.reveal:nth-of-type(3) {
-    animation-delay: 120ms;
-  }
-
-  .panel.reveal:nth-of-type(4) {
-    animation-delay: 170ms;
-  }
-
-  .panel.reveal:nth-of-type(5) {
-    animation-delay: 220ms;
+    gap: var(--sp-3);
   }
 
   @keyframes rise {
@@ -428,14 +319,20 @@ const education = {
     }
   }
 
-  @media (max-width: 720px) {
-    .tech-list {
-      display: block;
+  @media screen and (max-width: 680px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: var(--sp-2);
+      padding-block: var(--sp-6);
+    }
+
+    .hero-label {
+      line-height: 1.4;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reveal {
+    .hero {
       animation: none;
     }
   }

@@ -1,6 +1,25 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
-const { title = "nonica | website", bodyClass = "" } = Astro.props;
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { withBase } from "../lib/url";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = "nonica | website",
+  description = "低レイヤ / OS開発を中心に学んでいる大学3年生 nonica のウェブサイト。OS、コンパイラ、コンピュータアーキテクチャに関心があります。",
+  ogImage = "/og.png",
+} = Astro.props;
+
+const base = Astro.site ?? Astro.url;
+const canonical = new URL(Astro.url.pathname, base);
+const ogImageUrl = new URL(withBase(ogImage), base);
 const gaId = (import.meta.env.PUBLIC_GA_ID?.trim() || "G-F3YRJ3XXWK").trim();
 ---
 
@@ -8,6 +27,8 @@ const gaId = (import.meta.env.PUBLIC_GA_ID?.trim() || "G-F3YRJ3XXWK").trim();
 <html lang="ja">
   <head>
     <script is:inline>
+      // Applies the stored theme before first paint. Only an explicit choice is
+      // written; without one the CSS `prefers-color-scheme` branch takes over.
       (() => {
         try {
           const savedTheme = localStorage.getItem("theme");
@@ -19,15 +40,31 @@ const gaId = (import.meta.env.PUBLIC_GA_ID?.trim() || "G-F3YRJ3XXWK").trim();
         }
       })();
     </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="nonica" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&family=Noto+Sans+JP:wght@200;300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&family=Noto+Sans+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
+
+    <ClientRouter />
+
     {
       gaId && (
         <>
@@ -48,132 +85,95 @@ const gaId = (import.meta.env.PUBLIC_GA_ID?.trim() || "G-F3YRJ3XXWK").trim();
     }
   </head>
 
-  <body class={bodyClass}>
-    <main class="container">
-      <div class="toolbar">
-        <button
-          type="button"
-          class="theme-toggle"
-          data-theme-toggle
-          aria-live="polite"
-        >
-          <span data-theme-toggle-label>Dark mode</span>
-        </button>
-      </div>
-      <slot />
-      <footer class="site-footer">
-        <a href="/privacy-policy">プライバシーポリシー</a>
-      </footer>
-    </main>
-    <script is:inline>
-      (() => {
-        const root = document.documentElement;
+  <body>
+    <div class="container">
+      <SiteHeader />
+      <main><slot /></main>
+      <SiteFooter />
+    </div>
+
+    <script>
+      // Module scripts run once for the lifetime of the ClientRouter session,
+      // so the per-navigation work hangs off Astro's lifecycle events.
+      const root = document.documentElement;
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      const storedTheme = () => {
+        try {
+          const theme = localStorage.getItem("theme");
+          return theme === "light" || theme === "dark" ? theme : null;
+        } catch {
+          return null;
+        }
+      };
+
+      const resolvedTheme = () =>
+        storedTheme() ?? (prefersDark.matches ? "dark" : "light");
+
+      const syncButton = () => {
         const button = document.querySelector("[data-theme-toggle]");
         const label = document.querySelector("[data-theme-toggle-label]");
+        if (!button || !label) return;
 
-        if (!button || !label) {
-          return;
+        const nextLabel = resolvedTheme() === "dark" ? "Light mode" : "Dark mode";
+        label.textContent = nextLabel;
+        button.setAttribute("aria-label", `Switch to ${nextLabel.toLowerCase()}`);
+      };
+
+      // Absent an explicit choice we leave `data-theme` off entirely, which
+      // hands control back to the `prefers-color-scheme` branch in global.css.
+      const applyTheme = () => {
+        const theme = storedTheme();
+        if (theme) {
+          root.dataset.theme = theme;
+        } else {
+          delete root.dataset.theme;
         }
+        syncButton();
+      };
 
-        const reducedMotion = window.matchMedia(
-          "(prefers-reduced-motion: reduce)",
-        );
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+      const bindToggle = () => {
+        applyTheme();
+        document
+          .querySelector("[data-theme-toggle]")
+          ?.addEventListener("click", () => {
+            const nextTheme = resolvedTheme() === "dark" ? "light" : "dark";
 
-        const currentTheme = () => {
-          if (root.dataset.theme === "dark" || root.dataset.theme === "light") {
-            return root.dataset.theme;
-          }
+            try {
+              localStorage.setItem("theme", nextTheme);
+            } catch {
+              // ignore storage errors
+            }
 
-          return prefersDark.matches ? "dark" : "light";
-        };
+            if ("startViewTransition" in document && !reducedMotion.matches) {
+              document.startViewTransition(applyTheme);
+            } else {
+              applyTheme();
+            }
+          });
+      };
 
-        const syncButtonText = (theme) => {
-          const nextLabel = theme === "dark" ? "Light mode" : "Dark mode";
-          label.textContent = nextLabel;
-          button.setAttribute(
-            "aria-label",
-            `Switch to ${nextLabel.toLowerCase()}`,
-          );
-        };
+      // Fires on the initial load and after every client-side navigation. The
+      // button element is replaced on swap, so its listener goes with it.
+      document.addEventListener("astro:page-load", bindToggle);
 
-        const setTheme = (theme, withTransition) => {
-          const applyTheme = () => {
-            root.dataset.theme = theme;
-            syncButtonText(theme);
-          };
+      // A swap replaces the <html> attributes, taking `data-theme` with them.
+      document.addEventListener("astro:after-swap", applyTheme);
 
-          if (
-            withTransition &&
-            "startViewTransition" in document &&
-            !reducedMotion.matches
-          ) {
-            document.startViewTransition(applyTheme);
-            return;
-          }
-
-          applyTheme();
-        };
-
-        setTheme(currentTheme(), false);
-
-        button.addEventListener("click", () => {
-          const nextTheme = currentTheme() === "dark" ? "light" : "dark";
-
-          try {
-            localStorage.setItem("theme", nextTheme);
-          } catch {
-            // ignore storage errors
-          }
-
-          setTheme(nextTheme, true);
-        });
-      })();
+      // With no stored choice the palette already follows the OS through CSS;
+      // only the button label needs to catch up.
+      prefersDark.addEventListener("change", () => {
+        if (!storedTheme()) syncButton();
+      });
     </script>
   </body>
 </html>
 
 <style>
-  :root {
-    --bg: #edf0f3;
-    --bg-soft: #f4f6f8;
-    --fg: #313842;
-    --muted: #5d6570;
-    --accent: #4f6b8f;
-    --line: #ccd3dc;
-    --bg-glow: rgba(255, 255, 255, 0.56);
-    color-scheme: light;
-  }
-
-  :root[data-theme="dark"] {
-    --bg: #2e2e2e;
-    --bg-soft: #484848;
-    --fg: #d7dee7;
-    --muted: #a6b3c4;
-    --accent: #859dbd;
-    --line: #94a2b6;
-    --bg-glow: rgba(133, 157, 189, 0.12);
-    color-scheme: dark;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) {
-      --bg: #14191f;
-      --bg-soft: #1a2028;
-      --fg: #d7dee7;
-      --muted: #9eabbb;
-      --accent: #859dbd;
-      --line: #374250;
-      --bg-glow: rgba(133, 157, 189, 0.12);
-      color-scheme: dark;
-    }
-  }
-
   body {
     margin: 0;
-    font-family:
-      "Noto Sans JP", "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic",
-      "Meiryo", sans-serif;
+    font-family: var(--font-sans);
     font-weight: 300;
     background:
       radial-gradient(
@@ -182,60 +182,18 @@ const gaId = (import.meta.env.PUBLIC_GA_ID?.trim() || "G-F3YRJ3XXWK").trim();
         rgba(0, 0, 0, 0) 62%
       ),
       linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 100%);
+    background-attachment: fixed;
     color: var(--fg);
-    line-height: 1.84;
+    line-height: var(--lh-body);
     letter-spacing: 0.012em;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
   .container {
-    max-width: 760px;
+    max-width: var(--measure);
     margin: 0 auto;
-    padding: clamp(2.4rem, 5vw, 4rem) clamp(1.1rem, 4vw, 2rem) 4rem;
-  }
-
-  .toolbar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: clamp(0.5rem, 1vw, 0.9rem);
-  }
-
-  .theme-toggle {
-    border: 1px solid var(--line);
-    background: transparent;
-    color: var(--muted);
-    padding: 0.22rem 0.56rem;
-    font-size: 0.7rem;
-    font-weight: 300;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
-    cursor: pointer;
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  .theme-toggle:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-  }
-
-  .site-footer {
-    margin-top: clamp(3rem, 8vw, 5rem);
-    text-align: center;
-    font-size: 0.78rem;
-    color: var(--muted);
-    opacity: 0.72;
-  }
-
-  .site-footer a {
-    transition: color 0.2s ease;
-  }
-
-  .site-footer a:hover {
-    color: var(--muted);
+    padding: clamp(1.6rem, 4vw, 2.6rem) clamp(1.1rem, 4vw, 2rem) 4rem;
   }
 
   ::view-transition-old(root),

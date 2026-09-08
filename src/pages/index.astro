@@ -1,16 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Profile from "../components/Profile.astro";
-import Interests from "../components/Interests.astro";
+import Row from "../components/Row.astro";
+import TagList from "../components/TagList.astro";
 import Links from "../components/Links.astro";
-import myIcon from "../assets/no2ca.svg";
 import Projects from "../components/Projects.astro";
+import myIcon from "../assets/no2ca.svg";
 
 const name = "nonica";
 const update = "2026-03-30";
-const description = `
-低レイヤ / OS開発を中心に学んでいる大学3年生です.
-`;
+const description = "低レイヤ / OS開発を中心に学んでいる大学3年生です.";
 const interests = ["OS", "Rust", "RISC-V", "x86", "Compiler"];
 
 const links = [
@@ -43,45 +42,29 @@ const projects = [
 ];
 ---
 
-<BaseLayout title="nonica | Home Page">
-  <div class="reveal" style="--reveal-delay: 0ms;">
-    <Profile {myIcon} {name} {update} />
-  </div>
-  <div class="reveal" style="--reveal-delay: 70ms;">
-    <Interests {description} {interests} />
-  </div>
-  <div class="reveal" style="--reveal-delay: 120ms;">
+<BaseLayout title="nonica | Home" description={description}>
+  <Profile {myIcon} {name} {update} />
+
+  <Row label="About" delay={70}>
+    <p class="description">{description}</p>
+  </Row>
+
+  <Row label="Interests" delay={110}>
+    <TagList items={interests} />
+  </Row>
+
+  <Row label="Links" delay={150}>
     <Links {links} />
-  </div>
-  <div class="reveal" style="--reveal-delay: 170ms;">
+  </Row>
+
+  <Row label="Projects" delay={190}>
     <Projects {projects} />
-  </div>
+  </Row>
 </BaseLayout>
 
 <style>
-  .reveal {
-    animation: rise 420ms ease both;
-    animation-delay: var(--reveal-delay, 0ms);
-  }
-
-  .reveal + .reveal {
-    margin-top: clamp(1.4rem, 3vw, 2rem);
-  }
-
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .reveal {
-      animation: none;
-    }
+  .description {
+    max-width: 56ch;
+    font-weight: 300;
   }
 </style>

@@ -1,0 +1,122 @@
+---
+import { withBase } from "../lib/url";
+
+const nav = [
+  { name: "Home", href: withBase("/") },
+  { name: "Portfolio", href: withBase("/portfolio") },
+];
+
+const normalize = (path: string) => path.replace(/\/+$/, "") || "/";
+const current = normalize(Astro.url.pathname);
+---
+
+<header class="site-header">
+  <a class="wordmark" href={withBase("/")}>nonica</a>
+
+  <nav class="nav" aria-label="サイト内ナビゲーション">
+    {
+      nav.map((item) => (
+        <a
+          class="nav-link label"
+          href={item.href}
+          aria-current={normalize(item.href) === current ? "page" : undefined}
+        >
+          {item.name}
+        </a>
+      ))
+    }
+    <button
+      type="button"
+      class="theme-toggle label"
+      data-theme-toggle
+      aria-live="polite"
+    >
+      <span data-theme-toggle-label>Dark mode</span>
+    </button>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-2) var(--sp-4);
+    padding-bottom: var(--sp-3);
+    border-bottom: var(--rule);
+  }
+
+  .wordmark {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--fg);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .wordmark:hover {
+    color: var(--accent);
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-4);
+  }
+
+  .nav-link {
+    padding-bottom: 0.1rem;
+    border-bottom: 1px solid transparent;
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .nav-link[aria-current="page"] {
+    color: var(--fg);
+    border-bottom-color: var(--line);
+  }
+
+  .nav-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .theme-toggle {
+    border: var(--rule);
+    background: transparent;
+    padding: 0.18rem 0.5rem;
+    line-height: 1.5;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .theme-toggle:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  @media screen and (max-width: 520px) {
+    .site-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .nav {
+      width: 100%;
+    }
+
+    /* Keeps the two nav links grouped on the left with the toggle pinned
+       right, rather than scattering all three across the row. */
+    .theme-toggle {
+      margin-left: auto;
+    }
+  }
+</style>

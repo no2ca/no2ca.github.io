@@ -1,3 +1,86 @@
+/* =========================================================
+   Design tokens
+   ========================================================= */
+
+:root {
+  /* --- font stacks --- */
+  --font-sans:
+    "Noto Sans JP", "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic",
+    "Meiryo", sans-serif;
+  --font-display:
+    "Zen Kaku Gothic New", "Noto Sans JP", "Hiragino Sans", "Yu Gothic",
+    sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  /* --- type scale --- */
+  --fs-label: 0.72rem;
+  --fs-meta: 0.88rem;
+  --fs-lead: 0.93rem;
+  --lh-body: 1.84;
+
+  /* --- space scale (4px base) --- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+
+  /* --- layout --- */
+  --measure: 760px;
+  --label-col: 8.5rem;
+  --rule: 1px solid var(--line);
+
+  /* --- dark palette, defined once and referenced by both dark branches --- */
+  --dark-bg: #232323;
+  --dark-bg-soft: #2e2e2e;
+  --dark-fg: #d7dee7;
+  --dark-muted: #9a9a9a;
+  --dark-accent: #859dbd;
+  --dark-line: #474747;
+  --dark-glow: rgba(255, 255, 255, 0.05);
+
+  /* --- light palette (default) --- */
+  --bg: #edf0f3;
+  --bg-soft: #f4f6f8;
+  --fg: #313842;
+  --muted: #5d6570;
+  --accent: #4f6b8f;
+  --line: #ccd3dc;
+  --bg-glow: rgba(255, 255, 255, 0.56);
+  color-scheme: light;
+}
+
+/* Explicit dark choice */
+:root[data-theme="dark"] {
+  --bg: var(--dark-bg);
+  --bg-soft: var(--dark-bg-soft);
+  --fg: var(--dark-fg);
+  --muted: var(--dark-muted);
+  --accent: var(--dark-accent);
+  --line: var(--dark-line);
+  --bg-glow: var(--dark-glow);
+  color-scheme: dark;
+}
+
+/* System dark, unless the visitor explicitly chose light */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: var(--dark-bg);
+    --bg-soft: var(--dark-bg-soft);
+    --fg: var(--dark-fg);
+    --muted: var(--dark-muted);
+    --accent: var(--dark-accent);
+    --line: var(--dark-line);
+    --bg-glow: var(--dark-glow);
+    color-scheme: dark;
+  }
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+
 *,
 *::before,
 *::after {
@@ -5,11 +88,7 @@
 }
 
 ::selection {
-  background: rgba(146, 91, 134, 0.2);
-}
-
-section + section {
-  margin-top: 2.2rem;
+  background: color-mix(in oklab, var(--accent) 22%, transparent);
 }
 
 h1,
@@ -17,14 +96,11 @@ h2,
 h3 {
   margin: 0;
   color: var(--fg);
-  font-family:
-    "Zen Kaku Gothic New", "Noto Sans JP", "Hiragino Sans", "Yu Gothic",
-    sans-serif;
+  font-family: var(--font-display);
   letter-spacing: 0.02em;
 }
 
 h2 {
-  margin-bottom: 0.6rem;
   font-size: clamp(1.12rem, 2.8vw, 1.32rem);
   font-weight: 500;
   line-height: 1.45;
@@ -36,4 +112,19 @@ p {
 
 a {
   color: inherit;
+}
+
+/* =========================================================
+   Utilities
+   ========================================================= */
+
+/* The mono metadata treatment used throughout: row labels, eyebrows,
+   group titles, periods, the theme toggle. */
+.label {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 400;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }

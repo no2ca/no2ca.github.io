@@ -1,48 +1,103 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Row from "../components/Row.astro";
+
+const description =
+  "当サイトのプライバシーポリシー。アクセス解析に Google Analytics を使用しています。";
 ---
 
-<BaseLayout title="nonica | プライバシーポリシー" bodyClass="privacy-policy-page">
-  <article class="policy">
+<BaseLayout title="nonica | プライバシーポリシー" {description}>
+  <header class="hero">
+    <p class="label hero-label">Privacy</p>
     <h1>プライバシーポリシー</h1>
+  </header>
+
+  <Row label="Analytics" delay={70}>
     <p>
       当サイトでは、アクセス解析のためにGoogle Analyticsを使用しています。Google
       Analyticsはデータ収集のためにCookieを使用します。このデータは匿名で収集されており、個人を特定するものではありません。
     </p>
+  </Row>
+
+  <Row label="Opt out" delay={110}>
     <p>
       この機能はCookieを無効にすることで収集を拒否することができます。詳しくは
-      <a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noreferrer">
-        Googleのプライバシーポリシー
+      <a
+        href="https://policies.google.com/privacy?hl=ja"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Googleのプライバシーポリシー<span aria-hidden="true"> ↗</span>
       </a>
       をご確認ください。
     </p>
-  </article>
+  </Row>
 </BaseLayout>
 
 <style>
-  :global(body.privacy-policy-page) {
-    background: var(--bg);
+  .hero {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    gap: 0 var(--sp-6);
+    align-items: start;
+    padding-block: var(--sp-8);
+    animation: rise 420ms ease both;
   }
 
-  .policy {
-    max-width: 54ch;
-    margin: 0 auto;
-    display: grid;
-    gap: 1.2rem;
+  .hero-label {
+    line-height: var(--lh-body);
   }
 
   h1 {
     font-size: clamp(1.32rem, 3.5vw, 1.72rem);
     font-weight: 500;
-    margin-bottom: 0.2rem;
+    line-height: var(--lh-body);
   }
 
   p {
-    color: var(--fg);
-    line-height: 1.9;
+    max-width: 60ch;
   }
 
   a {
+    color: var(--fg);
+    text-decoration: none;
+    border-bottom: var(--rule);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  a:hover {
     color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media screen and (max-width: 680px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: var(--sp-2);
+      padding-block: var(--sp-6);
+    }
+
+    .hero-label {
+      line-height: 1.4;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero {
+      animation: none;
+    }
   }
 </style>

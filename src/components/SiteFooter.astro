@@ -1,0 +1,54 @@
+---
+import { withBase } from "../lib/url";
+
+const links = [
+  { name: "Home", href: withBase("/") },
+  { name: "Portfolio", href: withBase("/portfolio") },
+  { name: "プライバシーポリシー", href: withBase("/privacy-policy") },
+];
+---
+
+<footer class="site-footer">
+  <nav class="footer-nav" aria-label="フッターナビゲーション">
+    {links.map((link) => <a href={link.href}>{link.name}</a>)}
+  </nav>
+  <p class="copyright label">© nonica</p>
+</footer>
+
+<style>
+  .site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-2) var(--sp-4);
+    margin-top: clamp(3rem, 8vw, 5rem);
+    padding-top: var(--sp-3);
+    border-top: var(--rule);
+    font-size: var(--fs-meta);
+    color: var(--muted);
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-4);
+  }
+
+  .footer-nav a {
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .footer-nav a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .copyright {
+    margin: 0;
+  }
+</style>

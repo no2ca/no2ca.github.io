@@ -1,0 +1,64 @@
+---
+export interface Props {
+  label?: string;
+  /** Entrance animation offset, in ms. */
+  delay?: number;
+}
+const { label, delay = 0 } = Astro.props;
+---
+
+<section class="row" style={`--reveal-delay: ${delay}ms;`}>
+  {label && <p class="row-label label">{label}</p>}
+  <div class="row-body"><slot /></div>
+</section>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    gap: 0 var(--sp-6);
+    padding-block: var(--sp-6);
+    border-top: var(--rule);
+    animation: rise 420ms ease both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+
+  /* Matches the body line-height so the label sits on the same baseline as
+     the first line of the row body. */
+  .row-label {
+    line-height: var(--lh-body);
+  }
+
+  .row-body {
+    min-width: 0;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media screen and (max-width: 680px) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-2);
+      padding-block: var(--sp-4);
+    }
+
+    .row-label {
+      line-height: 1.4;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .row {
+      animation: none;
+    }
+  }
+</style>
