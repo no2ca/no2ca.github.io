@@ -9,12 +9,17 @@ export interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  ogType?: string;
+  /** ISO timestamp; emitted as article:published_time for post pages. */
+  publishedTime?: string;
 }
 
 const {
   title = "nonica | website",
   description = "低レイヤ / OS開発を中心に学んでいる大学3年生 nonica のウェブサイト。OS、コンパイラ、コンピュータアーキテクチャに関心があります。",
   ogImage = "/og.png",
+  ogType = "website",
+  publishedTime,
 } = Astro.props;
 
 const base = Astro.site ?? Astro.url;
@@ -48,12 +53,17 @@ const gaId = (import.meta.env.PUBLIC_GA_ID?.trim() || "G-F3YRJ3XXWK").trim();
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="nonica" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageUrl} />
+    {
+      publishedTime && (
+        <meta property="article:published_time" content={publishedTime} />
+      )
+    }
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />

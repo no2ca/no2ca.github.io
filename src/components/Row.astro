@@ -3,12 +3,15 @@ export interface Props {
   label?: string;
   /** Entrance animation offset, in ms. */
   delay?: number;
+  /** Drops the label column so the body spans the full measure — for long
+      running content such as an article body. */
+  wide?: boolean;
 }
-const { label, delay = 0 } = Astro.props;
+const { label, delay = 0, wide = false } = Astro.props;
 ---
 
-<section class="row" style={`--reveal-delay: ${delay}ms;`}>
-  {label && <p class="row-label label">{label}</p>}
+<section class:list={["row", { wide }]} style={`--reveal-delay: ${delay}ms;`}>
+  {label && <p class="label section-label">{label}</p>}
   <div class="row-body"><slot /></div>
 </section>
 
@@ -23,17 +26,19 @@ const { label, delay = 0 } = Astro.props;
     animation-delay: var(--reveal-delay, 0ms);
   }
 
-  /* Matches the body line-height so the label sits on the same baseline as
-     the first line of the row body. */
-  .row-label {
-    line-height: var(--lh-body);
-  }
-
-  /* Pinned to the content column so a label-less Row (an article body, say)
-     does not fall back into the narrow label column. */
+  /* Pinned to the content column so a label-less Row does not fall back into
+     the narrow label column. */
   .row-body {
     grid-column: 2;
     min-width: 0;
+  }
+
+  .row.wide {
+    grid-template-columns: 1fr;
+  }
+
+  .row.wide .row-body {
+    grid-column: auto;
   }
 
   @keyframes rise {
@@ -56,10 +61,6 @@ const { label, delay = 0 } = Astro.props;
 
     .row-body {
       grid-column: auto;
-    }
-
-    .row-label {
-      line-height: 1.4;
     }
   }
 

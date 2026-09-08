@@ -26,9 +26,15 @@ const description =
   post.data.description ?? `${post.data.title} — nonica のブログ記事.`;
 ---
 
-<BaseLayout title={`${post.data.title} | nonica`} {description}>
+<BaseLayout
+  title={`${post.data.title} | nonica`}
+  {description}
+  ogImage={`/og/blog/${post.id}.png`}
+  ogType="article"
+  publishedTime={post.data.pubDate.toISOString()}
+>
   <header class="hero">
-    <p class="label hero-label">Post</p>
+    <p class="label section-label">Post</p>
     <div class="hero-body">
       <p class="label dates">
         <time datetime={post.data.pubDate.toISOString()}>
@@ -66,7 +72,7 @@ const description =
     )
   }
 
-  <Row delay={110}>
+  <Row wide delay={110}>
     <article class="prose"><Content /></article>
   </Row>
 
@@ -85,10 +91,6 @@ const description =
     align-items: start;
     padding-block: var(--sp-8);
     animation: rise 420ms ease both;
-  }
-
-  .hero-label {
-    line-height: var(--lh-body);
   }
 
   .dates {
@@ -173,10 +175,6 @@ const description =
       grid-template-columns: 1fr;
       gap: var(--sp-2);
       padding-block: var(--sp-6);
-    }
-
-    .hero-label {
-      line-height: 1.4;
     }
   }
 

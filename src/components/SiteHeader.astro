@@ -2,26 +2,23 @@
 import { withBase } from "../lib/url";
 
 const nav = [
-  { name: "Home", href: withBase("/") },
   { name: "Blog", href: withBase("/blog") },
   { name: "Portfolio", href: withBase("/portfolio") },
 ];
 
 const normalize = (path: string) => path.replace(/\/+$/, "") || "/";
 const current = normalize(Astro.url.pathname);
-const home = normalize(withBase("/"));
 
 // Section pages keep their nav item marked while you are anywhere beneath
-// them (/blog/<slug>, /blog/tags/<tag>). Home only matches itself.
+// them (/blog/<slug>, /blog/tags/<tag>).
 const isCurrent = (href: string) => {
   const path = normalize(href);
-  if (path === home) return current === home;
   return current === path || current.startsWith(`${path}/`);
 };
 ---
 
 <header class="site-header">
-  <a class="wordmark" href={withBase("/")}>nonica</a>
+  <a class="home" href={withBase("/")}>no2ca.github.io</a>
 
   <nav class="nav" aria-label="サイト内ナビゲーション">
     {
@@ -57,17 +54,18 @@ const isCurrent = (href: string) => {
     border-bottom: var(--rule);
   }
 
-  .wordmark {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
+  /* The site mark: the domain rather than a personal name. Mono keeps it
+     reading as an address and sets it apart from the nav labels. */
+  .home {
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    letter-spacing: 0.02em;
     color: var(--fg);
     text-decoration: none;
     transition: color 0.2s ease;
   }
 
-  .wordmark:hover {
+  .home:hover {
     color: var(--accent);
   }
 
@@ -117,6 +115,12 @@ const isCurrent = (href: string) => {
     .site-header {
       flex-direction: column;
       align-items: stretch;
+    }
+
+    /* Without this the header's `align-items: stretch` widens the link to
+       the full row, making the whole line clickable. */
+    .home {
+      align-self: flex-start;
     }
 
     .nav {
