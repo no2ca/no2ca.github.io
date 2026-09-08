@@ -1,0 +1,78 @@
+---
+export interface Props {
+  /** Mono eyebrow shown in the label column, aligning with the Rows below. */
+  label: string;
+  title: string;
+  /** Set for the page's own h1; off for pages where the title is a heading
+      inside the content instead. */
+  size?: "large" | "small";
+}
+const { label, title, size = "large" } = Astro.props;
+---
+
+<header class:list={["hero", size]}>
+  <p class="label hero-label">{label}</p>
+  <div class="hero-body">
+    <h1>{title}</h1>
+    <slot />
+  </div>
+</header>
+
+<style>
+  /* Mirrors the Row grid so the eyebrow lines up with the labels below it. */
+  .hero {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    gap: 0 var(--sp-6);
+    align-items: start;
+    padding-block: var(--sp-8);
+    animation: rise 420ms ease both;
+  }
+
+  .hero-label {
+    line-height: var(--lh-body);
+  }
+
+  h1 {
+    font-weight: 500;
+  }
+
+  .large h1 {
+    font-size: clamp(1.9rem, 5.5vw, 2.7rem);
+    line-height: 1.15;
+  }
+
+  .small h1 {
+    font-size: clamp(1.32rem, 3.5vw, 1.72rem);
+    line-height: var(--lh-body);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media screen and (max-width: 680px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: var(--sp-2);
+      padding-block: var(--sp-6);
+    }
+
+    .hero-label {
+      line-height: 1.4;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero {
+      animation: none;
+    }
+  }
+</style>

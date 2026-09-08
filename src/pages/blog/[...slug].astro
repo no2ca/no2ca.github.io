@@ -1,0 +1,188 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Row from "../../components/Row.astro";
+import Toc from "../../components/Toc.astro";
+import { withBase } from "../../lib/url";
+import { getPosts, formatDate, type Post } from "../../lib/posts";
+import "../../styles/prose.css";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const description =
+  post.data.description ?? `${post.data.title} — nonica のブログ記事.`;
+---
+
+<BaseLayout title={`${post.data.title} | nonica`} {description}>
+  <header class="hero">
+    <p class="label hero-label">Post</p>
+    <div class="hero-body">
+      <p class="label dates">
+        <time datetime={post.data.pubDate.toISOString()}>
+          {formatDate(post.data.pubDate)}
+        </time>
+        {
+          post.data.updatedDate && (
+            <span>Updated {formatDate(post.data.updatedDate)}</span>
+          )
+        }
+        {post.data.draft && <span class="draft">Draft</span>}
+      </p>
+      <h1>{post.data.title}</h1>
+      {
+        post.data.tags.length > 0 && (
+          <ul class="tags">
+            {post.data.tags.map((tag) => (
+              <li>
+                <a class="tag" href={withBase(`/blog/tags/${tag}`)}>
+                  {tag}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </header>
+
+  {
+    headings.length > 0 && (
+      <Row label="Contents" delay={70}>
+        <Toc {headings} />
+      </Row>
+    )
+  }
+
+  <Row delay={110}>
+    <article class="prose"><Content /></article>
+  </Row>
+
+  <p class="back">
+    <a href={withBase("/blog")}>
+      <span aria-hidden="true">← </span>All posts
+    </a>
+  </p>
+</BaseLayout>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    gap: 0 var(--sp-6);
+    align-items: start;
+    padding-block: var(--sp-8);
+    animation: rise 420ms ease both;
+  }
+
+  .hero-label {
+    line-height: var(--lh-body);
+  }
+
+  .dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-3);
+    line-height: 1.5;
+  }
+
+  .draft {
+    border: var(--rule);
+    padding: 0 0.3rem;
+    color: var(--accent);
+  }
+
+  h1 {
+    margin-top: var(--sp-2);
+    font-size: clamp(1.5rem, 4.2vw, 2.05rem);
+    font-weight: 500;
+    line-height: 1.32;
+  }
+
+  .tags {
+    margin: var(--sp-3) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+
+  .tag {
+    display: inline-block;
+    border: var(--rule);
+    padding: 0.05rem 0.45rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    line-height: 1.7;
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .tag:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .back {
+    margin-top: var(--sp-6);
+    padding-top: var(--sp-3);
+    border-top: var(--rule);
+  }
+
+  .back a {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back a:hover {
+    color: var(--accent);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media screen and (max-width: 680px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: var(--sp-2);
+      padding-block: var(--sp-6);
+    }
+
+    .hero-label {
+      line-height: 1.4;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero {
+      animation: none;
+    }
+  }
+</style>

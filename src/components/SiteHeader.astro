@@ -3,11 +3,21 @@ import { withBase } from "../lib/url";
 
 const nav = [
   { name: "Home", href: withBase("/") },
+  { name: "Blog", href: withBase("/blog") },
   { name: "Portfolio", href: withBase("/portfolio") },
 ];
 
 const normalize = (path: string) => path.replace(/\/+$/, "") || "/";
 const current = normalize(Astro.url.pathname);
+const home = normalize(withBase("/"));
+
+// Section pages keep their nav item marked while you are anywhere beneath
+// them (/blog/<slug>, /blog/tags/<tag>). Home only matches itself.
+const isCurrent = (href: string) => {
+  const path = normalize(href);
+  if (path === home) return current === home;
+  return current === path || current.startsWith(`${path}/`);
+};
 ---
 
 <header class="site-header">
@@ -19,7 +29,7 @@ const current = normalize(Astro.url.pathname);
         <a
           class="nav-link label"
           href={item.href}
-          aria-current={normalize(item.href) === current ? "page" : undefined}
+          aria-current={isCurrent(item.href) ? "page" : undefined}
         >
           {item.name}
         </a>

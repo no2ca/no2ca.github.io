@@ -16,7 +16,7 @@
   --fs-label: 0.72rem;
   --fs-meta: 0.88rem;
   --fs-lead: 0.93rem;
-  --lh-body: 1.84;
+  --lh-body: 1.75;
 
   /* --- space scale (4px base) --- */
   --sp-1: 0.25rem;
@@ -38,16 +38,15 @@
   --dark-muted: #9a9a9a;
   --dark-accent: #859dbd;
   --dark-line: #474747;
-  --dark-glow: rgba(255, 255, 255, 0.05);
 
   /* --- light palette (default) --- */
-  --bg: #edf0f3;
+  --bg: #ffffff;
+  /* The one raised surface: code blocks, quotes. Never the page ground. */
   --bg-soft: #f4f6f8;
   --fg: #313842;
   --muted: #5d6570;
   --accent: #4f6b8f;
   --line: #ccd3dc;
-  --bg-glow: rgba(255, 255, 255, 0.56);
   color-scheme: light;
 }
 
@@ -59,7 +58,6 @@
   --muted: var(--dark-muted);
   --accent: var(--dark-accent);
   --line: var(--dark-line);
-  --bg-glow: var(--dark-glow);
   color-scheme: dark;
 }
 
@@ -72,7 +70,6 @@
     --muted: var(--dark-muted);
     --accent: var(--dark-accent);
     --line: var(--dark-line);
-    --bg-glow: var(--dark-glow);
     color-scheme: dark;
   }
 }

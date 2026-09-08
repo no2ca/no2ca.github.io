@@ -1,0 +1,129 @@
+---
+import { withBase } from "../lib/url";
+import { formatDate, type Post } from "../lib/posts";
+
+export interface Props {
+  posts: Post[];
+  /** Show each post's tags. Off on the home page, where space is tight. */
+  showTags?: boolean;
+}
+const { posts, showTags = false } = Astro.props;
+---
+
+{
+  posts.length === 0 ? (
+    <p class="empty">まだ記事がありません.</p>
+  ) : (
+    <ul class="posts">
+      {posts.map((post) => (
+        <li class="post">
+          <p class="label date">
+            <time datetime={post.data.pubDate.toISOString()}>
+              {formatDate(post.data.pubDate)}
+            </time>
+            {post.data.draft && <span class="draft">Draft</span>}
+          </p>
+          <a class="title" href={withBase(`/blog/${post.id}`)}>
+            {post.data.title}
+          </a>
+          {post.data.description && (
+            <p class="excerpt">{post.data.description}</p>
+          )}
+          {showTags && post.data.tags.length > 0 && (
+            <ul class="tags">
+              {post.data.tags.map((tag) => (
+                <li>
+                  <a class="tag" href={withBase(`/blog/tags/${tag}`)}>
+                    {tag}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .posts {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--sp-6);
+  }
+
+  .date {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    line-height: 1.5;
+  }
+
+  .draft {
+    border: var(--rule);
+    padding: 0 0.3rem;
+    color: var(--accent);
+  }
+
+  .title {
+    display: inline-block;
+    margin-top: 0.1rem;
+    font-family: var(--font-display);
+    font-size: 1.13rem;
+    font-weight: 400;
+    letter-spacing: 0.018em;
+    line-height: 1.45;
+    color: var(--fg);
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .title:hover {
+    color: var(--accent);
+    transform: translateX(1px);
+  }
+
+  .excerpt {
+    margin-top: 0.1rem;
+    color: var(--muted);
+    font-size: var(--fs-lead);
+  }
+
+  .tags {
+    margin: var(--sp-2) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+
+  .tag {
+    display: inline-block;
+    border: var(--rule);
+    padding: 0.05rem 0.45rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    line-height: 1.7;
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .tag:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .empty {
+    color: var(--muted);
+    font-size: var(--fs-lead);
+  }
+</style>

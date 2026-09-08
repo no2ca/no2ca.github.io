@@ -1,0 +1,202 @@
+/* =========================================================
+   Rendered Markdown.
+
+   Astro's scoped styles do not reach the HTML that <Content /> emits, so
+   these rules are global and matched under .prose.
+   ========================================================= */
+
+/* Clear the UA margins first so the flow rules below are the only thing
+   setting vertical rhythm. */
+.prose > * {
+  margin: 0;
+}
+
+.prose > * + * {
+  margin-top: var(--sp-4);
+}
+
+/* Code blocks read as their own object, so they get more air than a plain
+   paragraph break on both sides. */
+.prose > * + pre,
+.prose > pre + * {
+  margin-top: var(--sp-6);
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-display);
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+}
+
+.prose h2 {
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-3);
+  border-top: var(--rule);
+  font-size: 1.24rem;
+  font-weight: 500;
+}
+
+.prose h3 {
+  margin-top: var(--sp-6);
+  font-size: 1.06rem;
+  font-weight: 500;
+}
+
+.prose h4 {
+  margin-top: var(--sp-6);
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* Anchor targets clear the top of the viewport when jumping from the TOC. */
+.prose :is(h2, h3, h4) {
+  scroll-margin-top: var(--sp-6);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4rem;
+}
+
+.prose li + li {
+  margin-top: var(--sp-1);
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin-top: var(--sp-1);
+}
+
+.prose a {
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: var(--rule);
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.prose a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.prose strong {
+  font-weight: 500;
+}
+
+.prose blockquote {
+  margin-inline: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 2px solid var(--line);
+  background: var(--bg-soft);
+  color: var(--muted);
+}
+
+.prose blockquote > * + * {
+  margin-top: var(--sp-2);
+}
+
+.prose hr {
+  border: 0;
+  border-top: var(--rule);
+  margin-block: var(--sp-8);
+}
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: var(--rule);
+}
+
+.prose figcaption {
+  margin-top: var(--sp-2);
+  color: var(--muted);
+  font-size: var(--fs-meta);
+}
+
+/* --- code --- */
+
+.prose :not(pre) > code {
+  border: var(--rule);
+  background: var(--bg-soft);
+  padding: 0.1em 0.35em;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+.prose pre {
+  padding: var(--sp-4);
+  border: var(--rule);
+  overflow-x: auto;
+  font-size: var(--fs-meta);
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+.prose pre code {
+  font-family: var(--font-mono);
+}
+
+/* Shiki runs with `defaultColor: false`, so each token carries both palettes
+   as custom properties and the theme branches below choose one. The block's
+   own surface is ours, not the Shiki theme's, so code sits on the same
+   raised surface as inline code and quotes. */
+.prose .astro-code,
+.prose .astro-code span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+  text-decoration: var(--shiki-light-text-decoration);
+}
+
+.prose .astro-code {
+  background: var(--bg-soft) !important;
+}
+
+:root[data-theme="dark"] .prose .astro-code,
+:root[data-theme="dark"] .prose .astro-code span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+  text-decoration: var(--shiki-dark-text-decoration);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .prose .astro-code,
+  :root:not([data-theme="light"]) .prose .astro-code span {
+    color: var(--shiki-dark);
+    font-style: var(--shiki-dark-font-style);
+    font-weight: var(--shiki-dark-font-weight);
+    text-decoration: var(--shiki-dark-text-decoration);
+  }
+}
+
+/* --- tables --- */
+
+/* Markdown emits a bare <table> with no wrapper to scroll, so the table
+   itself becomes the scroll container on narrow screens. */
+.prose table {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--fs-meta);
+}
+
+.prose :is(th, td) {
+  border: var(--rule);
+  padding: var(--sp-2) var(--sp-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  font-weight: 500;
+  background: var(--bg-soft);
+}

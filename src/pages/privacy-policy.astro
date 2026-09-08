@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
 import Row from "../components/Row.astro";
 
 const description =
@@ -7,10 +8,7 @@ const description =
 ---
 
 <BaseLayout title="nonica | プライバシーポリシー" {description}>
-  <header class="hero">
-    <p class="label hero-label">Privacy</p>
-    <h1>プライバシーポリシー</h1>
-  </header>
+  <PageHero label="Privacy" title="プライバシーポリシー" size="small" />
 
   <Row label="Analytics" delay={70}>
     <p>
@@ -35,25 +33,6 @@ const description =
 </BaseLayout>
 
 <style>
-  .hero {
-    display: grid;
-    grid-template-columns: var(--label-col) 1fr;
-    gap: 0 var(--sp-6);
-    align-items: start;
-    padding-block: var(--sp-8);
-    animation: rise 420ms ease both;
-  }
-
-  .hero-label {
-    line-height: var(--lh-body);
-  }
-
-  h1 {
-    font-size: clamp(1.32rem, 3.5vw, 1.72rem);
-    font-weight: 500;
-    line-height: var(--lh-body);
-  }
-
   p {
     max-width: 60ch;
   }
@@ -70,34 +49,5 @@ const description =
   a:hover {
     color: var(--accent);
     border-color: var(--accent);
-  }
-
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media screen and (max-width: 680px) {
-    .hero {
-      grid-template-columns: 1fr;
-      gap: var(--sp-2);
-      padding-block: var(--sp-6);
-    }
-
-    .hero-label {
-      line-height: 1.4;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero {
-      animation: none;
-    }
   }
 </style>

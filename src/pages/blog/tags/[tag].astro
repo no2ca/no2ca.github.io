@@ -1,0 +1,72 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PageHero from "../../../components/PageHero.astro";
+import Row from "../../../components/Row.astro";
+import PostList from "../../../components/PostList.astro";
+import { withBase } from "../../../lib/url";
+import { getPosts, type Post } from "../../../lib/posts";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts.filter((post) => post.data.tags.includes(tag)),
+    },
+  }));
+}
+
+interface Props {
+  tag: string;
+  posts: Post[];
+}
+
+const { tag, posts } = Astro.props;
+const description = `「${tag}」タグの記事一覧 — nonica のブログ.`;
+---
+
+<BaseLayout title={`${tag} | nonica Blog`} {description}>
+  <PageHero label="Tag" title={tag} size="small">
+    <p class="lead">{posts.length} posts</p>
+  </PageHero>
+
+  <Row label="Posts" delay={70}>
+    <PostList {posts} showTags />
+  </Row>
+
+  <p class="back">
+    <a href={withBase("/blog")}>
+      <span aria-hidden="true">← </span>All posts
+    </a>
+  </p>
+</BaseLayout>
+
+<style>
+  .lead {
+    margin-top: var(--sp-2);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+  }
+
+  .back {
+    margin-top: var(--sp-6);
+    padding-top: var(--sp-3);
+    border-top: var(--rule);
+  }
+
+  .back a {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back a:hover {
+    color: var(--accent);
+  }
+</style>

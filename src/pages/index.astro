@@ -4,12 +4,22 @@ import Profile from "../components/Profile.astro";
 import Row from "../components/Row.astro";
 import TagList from "../components/TagList.astro";
 import Links from "../components/Links.astro";
-import Projects from "../components/Projects.astro";
+import PostList from "../components/PostList.astro";
 import myIcon from "../assets/no2ca.svg";
+import { withBase } from "../lib/url";
+import { getPosts } from "../lib/posts";
 
 const name = "nonica";
-const update = "2026-03-30";
-const description = "低レイヤ / OS開発を中心に学んでいる大学3年生です.";
+const update = "2026-09-08";
+
+// The one place the site introduces itself; /portfolio no longer repeats it.
+const about = [
+  "低レイヤ / OS開発を中心に学んでいる大学3年生です.",
+  "慶應義塾大学 環境情報学部に在籍し、OS・コンパイラ・コンピュータアーキテクチャを中心に、Rust と C で実装しながら内部構造を理解するスタイルで開発しています.",
+  "現在は AArch64 向けハイパーバイザを継続開発中です.",
+];
+const description = about[0];
+
 const interests = ["OS", "Rust", "RISC-V", "x86", "Compiler"];
 
 const links = [
@@ -23,48 +33,67 @@ const links = [
   { name: "X", url: "https://x.com/no2cax" },
 ];
 
-const projects = [
-  {
-    name: "nex_os",
-    description: "RISC-Vで動作するOS",
-    url: "https://github.com/no2ca/nex_os",
-  },
-  {
-    name: "lifegame",
-    description: "ベアメタルのx86で動くライフゲーム",
-    url: "https://github.com/no2ca/lifegame",
-  },
-  {
-    name: "nonicc",
-    description: "x86_64をターゲットにしたCコンパイラ",
-    url: "https://github.com/no2ca/nonicc",
-  },
-];
+const latestPosts = (await getPosts()).slice(0, 3);
 ---
 
-<BaseLayout title="nonica | Home" description={description}>
+<BaseLayout title="nonica | Home" {description}>
   <Profile {myIcon} {name} {update} />
 
   <Row label="About" delay={70}>
-    <p class="description">{description}</p>
+    {about.map((line) => <p class="about-line">{line}</p>)}
   </Row>
 
   <Row label="Interests" delay={110}>
     <TagList items={interests} />
   </Row>
 
-  <Row label="Links" delay={150}>
-    <Links {links} />
+  <Row label="Writing" delay={150}>
+    <PostList posts={latestPosts} />
+    <p class="more">
+      <a href={withBase("/blog")}>
+        View all posts<span aria-hidden="true"> →</span>
+      </a>
+    </p>
   </Row>
 
-  <Row label="Projects" delay={190}>
-    <Projects {projects} />
+  <Row label="Links" delay={190}>
+    <Links {links} />
+    <p class="more">
+      <a href={withBase("/portfolio")}>
+        View portfolio<span aria-hidden="true"> →</span>
+      </a>
+    </p>
   </Row>
 </BaseLayout>
 
 <style>
-  .description {
-    max-width: 56ch;
-    font-weight: 300;
+  .about-line {
+    max-width: 60ch;
+  }
+
+  .about-line + .about-line {
+    margin-top: var(--sp-2);
+  }
+
+  .more {
+    margin-top: var(--sp-6);
+    padding-top: var(--sp-3);
+    border-top: var(--rule);
+  }
+
+  .more a {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    color: var(--muted);
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .more a:hover {
+    color: var(--accent);
+    transform: translateX(1px);
   }
 </style>

@@ -1,22 +1,16 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
 import Row from "../components/Row.astro";
 import TagList from "../components/TagList.astro";
 
 const profile = {
-  name: "Taisei Ono",
-  handle: "nonica / no2ca",
+  name: "nonica",
+  handle: "no2ca",
   role: "Systems & Low-level Software",
   location: "Yokohama, Japan",
-  date: "2026-03-31",
+  date: "2026-09-08",
 };
-
-const about = [
-  "慶應義塾大学 環境情報学部に在籍し、低レイヤソフトウェア開発を中心に学んでいます。",
-  "主な関心領域は OS、コンパイラ、コンピュータアーキテクチャです。",
-  "Rust と C を使って、実装しながら内部構造を理解するスタイルで開発しています。",
-  "現在はAArch64向けハイパーバイザを継続開発中です。",
-];
 
 const skillGroups = [
   { title: "Languages", items: ["Rust", "C", "C++"] },
@@ -86,24 +80,16 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
 ---
 
 <BaseLayout title="nonica | Portfolio" {description}>
-  <header class="hero">
-    <p class="label hero-label">Portfolio</p>
-    <div class="hero-body">
-      <h1>{profile.name}</h1>
-      <div class="meta">
-        <span>{profile.handle}</span>
-        <span>{profile.role}</span>
-        <span>{profile.location}</span>
-      </div>
-      <p class="label hero-date">Last updated {profile.date}</p>
+  <PageHero label="Portfolio" title={profile.name}>
+    <div class="meta">
+      <span>{profile.handle}</span>
+      <span>{profile.role}</span>
+      <span>{profile.location}</span>
     </div>
-  </header>
+    <p class="label hero-date">Last updated {profile.date}</p>
+  </PageHero>
 
-  <Row label="About" delay={70}>
-    {about.map((line) => <p class="about-line">{line}</p>)}
-  </Row>
-
-  <Row label="Skills" delay={110}>
+  <Row label="Skills" delay={70}>
     <div class="skill-groups">
       {
         skillGroups.map((group) => (
@@ -116,7 +102,7 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
     </div>
   </Row>
 
-  <Row label="Projects" delay={150}>
+  <Row label="Projects" delay={110}>
     <ul class="projects">
       {
         projects.map((project) => (
@@ -140,7 +126,7 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
     </ul>
   </Row>
 
-  <Row label="Experience" delay={190}>
+  <Row label="Experience" delay={150}>
     <ul class="history">
       {
         experiences.map((item) => (
@@ -154,7 +140,7 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
     </ul>
   </Row>
 
-  <Row label="Education" delay={230}>
+  <Row label="Education" delay={190}>
     <p>{education.school}</p>
     <p>{education.faculty}</p>
     <p class="muted">{education.expected}</p>
@@ -162,12 +148,8 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
     <TagList items={education.courses} />
   </Row>
 
-  <Row label="Contact" delay={270}>
+  <Row label="Contact" delay={230}>
     <ul class="contact">
-      <li>
-        <p class="label">Email</p>
-        <p>taiseiono6[@]gmail.com</p>
-      </li>
       <li>
         <p class="label">GitHub</p>
         <p>
@@ -176,31 +158,31 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
           </a>
         </p>
       </li>
+      <li>
+        <p class="label">Bluesky</p>
+        <p>
+          <a
+            href="https://bsky.app/profile/did:plc:wvwzypmkkewmn3yaedrpzncd"
+            target="_blank"
+            rel="noreferrer"
+          >
+            @nonica<span aria-hidden="true"> ↗</span>
+          </a>
+        </p>
+      </li>
+      <li>
+        <p class="label">X</p>
+        <p>
+          <a href="https://x.com/no2cax" target="_blank" rel="noreferrer">
+            @no2cax<span aria-hidden="true"> ↗</span>
+          </a>
+        </p>
+      </li>
     </ul>
   </Row>
 </BaseLayout>
 
 <style>
-  /* Mirrors the Row grid so the eyebrow lines up with the labels below. */
-  .hero {
-    display: grid;
-    grid-template-columns: var(--label-col) 1fr;
-    gap: 0 var(--sp-6);
-    align-items: start;
-    padding-block: var(--sp-8);
-    animation: rise 420ms ease both;
-  }
-
-  .hero-label {
-    line-height: var(--lh-body);
-  }
-
-  h1 {
-    font-size: clamp(1.9rem, 5.5vw, 2.7rem);
-    font-weight: 500;
-    line-height: 1.15;
-  }
-
   .meta {
     margin-top: var(--sp-3);
     display: flex;
@@ -212,10 +194,6 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
   }
 
   .hero-date {
-    margin-top: var(--sp-2);
-  }
-
-  .about-line + .about-line {
     margin-top: var(--sp-2);
   }
 
@@ -306,34 +284,5 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
 
   .contact {
     gap: var(--sp-3);
-  }
-
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media screen and (max-width: 680px) {
-    .hero {
-      grid-template-columns: 1fr;
-      gap: var(--sp-2);
-      padding-block: var(--sp-6);
-    }
-
-    .hero-label {
-      line-height: 1.4;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero {
-      animation: none;
-    }
   }
 </style>

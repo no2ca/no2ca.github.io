@@ -1,0 +1,84 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import Row from "../../components/Row.astro";
+import PostList from "../../components/PostList.astro";
+import { withBase } from "../../lib/url";
+import { getPosts, getTags } from "../../lib/posts";
+
+const posts = await getPosts();
+const tags = await getTags();
+
+const description =
+  "nonica のブログ。OS、コンパイラ、コンピュータアーキテクチャなど低レイヤまわりの記録。";
+---
+
+<BaseLayout title="nonica | Blog" {description}>
+  <PageHero label="Blog" title="Blog">
+    <p class="lead">低レイヤまわりで手を動かした記録を置いています.</p>
+  </PageHero>
+
+  {
+    tags.length > 0 && (
+      <Row label="Tags" delay={70}>
+        <ul class="tag-list">
+          {tags.map(({ tag, count }) => (
+            <li>
+              <a class="tag" href={withBase(`/blog/tags/${tag}`)}>
+                {tag}
+                <span class="count">{count}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Row>
+    )
+  }
+
+  <Row label={`Posts (${posts.length})`} delay={110}>
+    <PostList {posts} showTags />
+  </Row>
+</BaseLayout>
+
+<style>
+  .lead {
+    margin-top: var(--sp-3);
+    color: var(--muted);
+    font-size: var(--fs-meta);
+  }
+
+  .tag-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    border: var(--rule);
+    padding: 0.15rem 0.55rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    line-height: 1.6;
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .tag:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .count {
+    font-size: var(--fs-label);
+    opacity: 0.7;
+  }
+</style>
