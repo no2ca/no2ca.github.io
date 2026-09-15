@@ -1,0 +1,15 @@
+---
+/**
+ * A plain, inline list of terms: "OS · Rust · RISC-V". Nothing here is a
+ * link — clickable tags use the `.chip` treatment instead, so the two are
+ * never confused.
+ */
+export interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+---
+
+<ul class="keywords">
+  {items.map((item) => <li>{item}</li>)}
+</ul>

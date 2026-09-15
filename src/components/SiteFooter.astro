@@ -10,46 +10,64 @@ const links = [
 ---
 
 <footer class="site-footer">
-  <nav class="footer-nav" aria-label="フッターナビゲーション">
-    {links.map((link) => <a href={link.href}>{link.name}</a>)}
-  </nav>
-  <p class="copyright label">© nonica</p>
+  <div class="inner">
+    <nav class="footer-nav" aria-label="フッターナビゲーション">
+      {links.map((link) => <a href={link.href}>{link.name}</a>)}
+    </nav>
+    <p class="copyright label">© nonica</p>
+  </div>
 </footer>
 
 <style>
   .site-footer {
+    margin-top: clamp(3.5rem, 9vw, 6rem);
+    padding-bottom: clamp(2rem, 6vw, 3.5rem);
+  }
+
+  .inner {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
     gap: var(--sp-2) var(--sp-4);
-    margin-top: clamp(3rem, 8vw, 5rem);
-    padding-top: var(--sp-3);
-    border-top: var(--rule);
+    max-width: var(--measure);
+    margin: 0 auto;
+    padding: var(--sp-4) var(--gutter) 0;
     font-size: var(--fs-meta);
     color: var(--muted);
+  }
+
+  /* Drawn inside the gutters so the rule is as wide as the content above
+     it, not the padded box. */
+  .inner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: var(--gutter);
+    right: var(--gutter);
+    border-top: var(--rule);
   }
 
   .footer-nav {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--sp-2) var(--sp-4);
+    gap: 0 var(--sp-4);
   }
 
   .footer-nav a {
+    display: inline-block;
+    padding-block: var(--sp-1);
     text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
+    transition: color 0.2s ease;
   }
 
   .footer-nav a:hover {
     color: var(--accent);
-    border-bottom-color: var(--accent);
   }
 
   .copyright {
     margin: 0;
+    padding-block: var(--sp-1);
   }
 </style>

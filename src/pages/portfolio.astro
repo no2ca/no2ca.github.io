@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import Row from "../components/Row.astro";
-import TagList from "../components/TagList.astro";
+import Keywords from "../components/Keywords.astro";
 
 const profile = {
   name: "nonica",
@@ -11,6 +11,10 @@ const profile = {
   location: "Yokohama, Japan",
   date: "2026-09-08",
 };
+
+// One line under the name so the page can be understood without scrolling.
+const summary =
+  "OS・コンパイラ・ベアメタル実装を中心としたシステムソフトウェア開発の経歴と成果物。";
 
 const skillGroups = [
   { title: "Languages", items: ["Rust", "C", "C++"] },
@@ -76,46 +80,76 @@ const education = {
   ],
 };
 
-const description = `${profile.name}（${profile.handle}）のポートフォリオ。OS・コンパイラ・ベアメタル実装を中心としたシステムソフトウェア開発の経歴と成果物。`;
+const contacts = [
+  {
+    label: "GitHub",
+    text: "github.com/no2ca",
+    url: "https://github.com/no2ca",
+  },
+  {
+    label: "Bluesky",
+    text: "@nonica",
+    url: "https://bsky.app/profile/did:plc:wvwzypmkkewmn3yaedrpzncd",
+  },
+  { label: "X", text: "@no2cax", url: "https://x.com/no2cax" },
+];
+
+const description = `${profile.name}（${profile.handle}）のポートフォリオ。${summary}`;
 ---
 
 <BaseLayout title="nonica | Portfolio" {description}>
   <PageHero label="Portfolio" title={profile.name}>
-    <div class="meta">
-      <span>{profile.handle}</span>
-      <span>{profile.role}</span>
-      <span>{profile.location}</span>
-    </div>
-    <p class="label hero-date">Last updated {profile.date}</p>
+    <ul class="meta keywords">
+      <li>{profile.handle}</li>
+      <li>{profile.role}</li>
+      <li>{profile.location}</li>
+    </ul>
+    <p class="summary">{summary}</p>
+    <p class="label hero-date">Updated {profile.date}</p>
   </PageHero>
 
-  <Row label="Skills" delay={70}>
-    <div class="skill-groups">
+  <Row id="skills" label="Skills" delay={70}>
+    <dl class="spec">
       {
         skillGroups.map((group) => (
-          <div class="skill-group">
-            <p class="label group-title">{group.title}</p>
-            <TagList items={group.items} />
+          <div class="spec-row">
+            <dt class="label">{group.title}</dt>
+            <dd>
+              <Keywords items={group.items} />
+            </dd>
           </div>
         ))
       }
-    </div>
+    </dl>
   </Row>
 
-  <Row label="Projects" delay={110}>
+  <Row id="projects" label="Projects" delay={110}>
     <ul class="projects">
       {
         projects.map((project) => (
           <li class="project">
-            <h2>{project.name}</h2>
+            <h3>
+              {project.github ? (
+                <a href={project.github} target="_blank" rel="noreferrer">
+                  {project.name}
+                  <span class="arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </a>
+              ) : (
+                project.name
+              )}
+            </h3>
             <p class="project-what">{project.what}</p>
-            <TagList items={project.tech} />
-            <div class="project-links">
-              <a href={project.github} target="_blank" rel="noreferrer">
-                GitHub<span aria-hidden="true"> ↗</span>
-              </a>
+            <div class="project-foot">
+              <Keywords items={project.tech} />
               {project.demo && (
-                <a href={project.demo} target="_blank" rel="noreferrer">
+                <a
+                  class="text-link demo"
+                  href={project.demo}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Demo<span aria-hidden="true"> ↗</span>
                 </a>
               )}
@@ -126,163 +160,229 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
     </ul>
   </Row>
 
-  <Row label="Experience" delay={150}>
-    <ul class="history">
+  <Row id="experience" label="Experience" delay={150}>
+    <ol class="history">
       {
         experiences.map((item) => (
-          <li>
+          <li class="entry">
             <p class="label period">{item.period}</p>
-            <p class="history-title">{item.title}</p>
-            <p class="history-detail">{item.detail}</p>
+            <div class="entry-body">
+              <h3 class="entry-title">{item.title}</h3>
+              <p class="entry-detail">{item.detail}</p>
+            </div>
           </li>
         ))
       }
-    </ul>
+    </ol>
   </Row>
 
-  <Row label="Education" delay={190}>
-    <p>{education.school}</p>
-    <p>{education.faculty}</p>
-    <p class="muted">{education.expected}</p>
-    <p class="label group-title coursework">Relevant Coursework</p>
-    <TagList items={education.courses} />
+  <Row id="education" label="Education" delay={190}>
+    <div class="entry">
+      <p class="label period">{education.expected}</p>
+      <div class="entry-body">
+        <h3 class="entry-title">{education.school}</h3>
+        <p class="entry-detail">{education.faculty}</p>
+        <div class="coursework">
+          <p class="label">Coursework</p>
+          <Keywords items={education.courses} />
+        </div>
+      </div>
+    </div>
   </Row>
 
-  <Row label="Contact" delay={230}>
-    <ul class="contact">
-      <li>
-        <p class="label">GitHub</p>
-        <p>
-          <a href="https://github.com/no2ca" target="_blank" rel="noreferrer">
-            github.com/no2ca<span aria-hidden="true"> ↗</span>
-          </a>
-        </p>
-      </li>
-      <li>
-        <p class="label">Bluesky</p>
-        <p>
-          <a
-            href="https://bsky.app/profile/did:plc:wvwzypmkkewmn3yaedrpzncd"
-            target="_blank"
-            rel="noreferrer"
-          >
-            @nonica<span aria-hidden="true"> ↗</span>
-          </a>
-        </p>
-      </li>
-      <li>
-        <p class="label">X</p>
-        <p>
-          <a href="https://x.com/no2cax" target="_blank" rel="noreferrer">
-            @no2cax<span aria-hidden="true"> ↗</span>
-          </a>
-        </p>
-      </li>
-    </ul>
+  <Row id="contact" label="Contact" delay={230}>
+    <dl class="spec">
+      {
+        contacts.map((contact) => (
+          <div class="spec-row">
+            <dt class="label">{contact.label}</dt>
+            <dd>
+              <a
+                class="contact-link"
+                href={contact.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {contact.text}
+                <span class="arrow" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
   </Row>
 </BaseLayout>
 
 <style>
+  /* --- hero --- */
+
   .meta {
     margin-top: var(--sp-3);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2) var(--sp-4);
-    color: var(--muted);
     font-size: var(--fs-meta);
-    line-height: 1.6;
+  }
+
+  .summary {
+    margin-top: var(--sp-4);
+    max-width: 60ch;
   }
 
   .hero-date {
-    margin-top: var(--sp-2);
+    margin-top: var(--sp-4);
   }
 
-  .skill-groups {
+  /* --- label | value rows (Skills, Coursework, Contact) --- */
+
+  .spec {
+    margin: 0;
     display: grid;
-    gap: var(--sp-4);
+    gap: var(--sp-3);
   }
 
-  .group-title {
-    margin-bottom: var(--sp-2);
+  .spec-row {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: var(--sp-1) var(--sp-4);
+    align-items: baseline;
   }
 
-  .projects,
-  .history,
-  .contact {
+  .spec dt {
+    /* Sits on the value's first line. */
+    line-height: 1.7;
+  }
+
+  .spec dd {
+    margin: 0;
+    min-width: 0;
+  }
+
+  /* --- projects --- */
+
+  .projects {
     margin: 0;
     padding: 0;
     list-style: none;
     display: grid;
+    gap: var(--sp-6);
   }
 
-  .projects {
-    gap: var(--sp-4);
-  }
-
-  .project + .project {
-    padding-top: var(--sp-4);
-    border-top: var(--rule);
-  }
-
-  h2 {
+  .project h3 {
     font-size: 1.1rem;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 1.4;
   }
 
+  .project h3 a,
+  .contact-link {
+    color: var(--fg);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .arrow {
+    color: var(--muted);
+    font-weight: 400;
+    transition:
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .project h3 a:hover,
+  .contact-link:hover,
+  .project h3 a:hover .arrow,
+  .contact-link:hover .arrow {
+    color: var(--accent);
+  }
+
+  .project h3 a:hover .arrow,
+  .contact-link:hover .arrow {
+    transform: translate(1px, -1px);
+  }
+
   .project-what {
-    margin: 0.3rem 0 var(--sp-3);
+    margin-top: var(--sp-1);
     color: var(--muted);
     font-size: var(--fs-lead);
   }
 
-  .project-links {
-    margin-top: var(--sp-3);
+  .project-foot {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: var(--sp-2) var(--sp-4);
+    align-items: baseline;
+    gap: var(--sp-1) var(--sp-4);
+    margin-top: var(--sp-2);
+  }
+
+  .demo {
     font-size: var(--fs-meta);
   }
 
-  a {
-    color: var(--fg);
-    text-decoration: none;
-    border-bottom: var(--rule);
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  a:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-  }
-
-  .muted {
-    color: var(--muted);
-    font-size: var(--fs-meta);
-  }
+  /* --- experience / education --- */
 
   .history {
-    gap: var(--sp-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--sp-5);
   }
 
-  .history-title {
-    font-weight: 400;
+  /* Period in a narrow column, the entry beside it, so the dates read as a
+     timeline down the left and the titles line up. */
+  .entry {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: var(--sp-1) var(--sp-4);
+    align-items: baseline;
   }
 
-  .history-detail {
-    margin-top: 0.2rem;
+  /* Tracked a little tighter than other labels so the longest period,
+     "2025年5月 - 2025年12月", stays on one line in its column. */
+  .period {
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+  }
+
+  .entry-body {
+    min-width: 0;
+  }
+
+  .entry-title {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .entry-detail {
+    margin-top: var(--sp-1);
     color: var(--muted);
     font-size: var(--fs-lead);
   }
 
   .coursework {
+    display: grid;
+    gap: var(--sp-1);
     margin-top: var(--sp-3);
   }
 
-  .contact {
-    gap: var(--sp-3);
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2em;
+    padding-block: var(--sp-1);
+  }
+
+  @media screen and (max-width: 680px) {
+    .spec-row,
+    .entry {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .period {
+      margin-bottom: 0.1rem;
+    }
   }
 </style>

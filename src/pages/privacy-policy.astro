@@ -8,7 +8,7 @@ const description =
 ---
 
 <BaseLayout title="nonica | プライバシーポリシー" {description}>
-  <PageHero label="Privacy" title="プライバシーポリシー" size="small" />
+  <PageHero title="プライバシーポリシー" size="small" />
 
   <Row label="Analytics" delay={70}>
     <p>
@@ -21,6 +21,7 @@ const description =
     <p>
       この機能はCookieを無効にすることで収集を拒否することができます。詳しくは
       <a
+        class="text-link"
         href="https://policies.google.com/privacy?hl=ja"
         target="_blank"
         rel="noreferrer"
@@ -35,19 +36,5 @@ const description =
 <style>
   p {
     max-width: 60ch;
-  }
-
-  a {
-    color: var(--fg);
-    text-decoration: none;
-    border-bottom: var(--rule);
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  a:hover {
-    color: var(--accent);
-    border-color: var(--accent);
   }
 </style>

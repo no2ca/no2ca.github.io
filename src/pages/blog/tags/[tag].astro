@@ -30,43 +30,28 @@ const description = `「${tag}」タグの記事一覧 — nonica のブログ.`
 
 <BaseLayout title={`${tag} | nonica Blog`} {description}>
   <PageHero label="Tag" title={tag} size="small">
-    <p class="lead">{posts.length} posts</p>
+    <p class="label count">
+      {posts.length}
+      {posts.length === 1 ? "post" : "posts"}
+    </p>
+    <p class="crumb">
+      <a class="more-link" href={withBase("/blog")}>
+        <span aria-hidden="true">←</span>All posts
+      </a>
+    </p>
   </PageHero>
 
-  <Row label="Posts" delay={70}>
-    <PostList {posts} showTags />
+  <Row wide delay={70}>
+    <PostList {posts} showTags timeline />
   </Row>
-
-  <p class="back">
-    <a href={withBase("/blog")}>
-      <span aria-hidden="true">← </span>All posts
-    </a>
-  </p>
 </BaseLayout>
 
 <style>
-  .lead {
+  .count {
     margin-top: var(--sp-2);
-    color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: var(--fs-meta);
   }
 
-  .back {
-    margin-top: var(--sp-6);
-    padding-top: var(--sp-3);
-    border-top: var(--rule);
-  }
-
-  .back a {
-    font-family: var(--font-mono);
-    font-size: var(--fs-meta);
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .back a:hover {
-    color: var(--accent);
+  .crumb {
+    margin-top: var(--sp-4);
   }
 </style>

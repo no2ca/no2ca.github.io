@@ -1,25 +1,27 @@
 ---
 import { render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Row from "../../components/Row.astro";
 import Toc from "../../components/Toc.astro";
 import { withBase } from "../../lib/url";
 import { getPosts, formatDate, type Post } from "../../lib/posts";
 import "../../styles/prose.css";
 
 export async function getStaticPaths() {
+  // Newest first, so the neighbour before a post is the newer one.
   const posts = await getPosts();
-  return posts.map((post) => ({
+  return posts.map((post, index) => ({
     params: { slug: post.id },
-    props: { post },
+    props: { post, newer: posts[index - 1], older: posts[index + 1] },
   }));
 }
 
 interface Props {
   post: Post;
+  newer?: Post;
+  older?: Post;
 }
 
-const { post } = Astro.props;
+const { post, newer, older } = Astro.props;
 const { Content, headings } = await render(post);
 
 const description =
@@ -33,154 +35,192 @@ const description =
   ogType="article"
   publishedTime={post.data.pubDate.toISOString()}
 >
-  <header class="hero">
-    <p class="label section-label">Post</p>
-    <div class="hero-body">
-      <p class="label dates">
-        <time datetime={post.data.pubDate.toISOString()}>
-          {formatDate(post.data.pubDate)}
-        </time>
-        {
-          post.data.updatedDate && (
-            <span>Updated {formatDate(post.data.updatedDate)}</span>
-          )
-        }
-        {post.data.draft && <span class="draft">Draft</span>}
+  <article class="post">
+    <header class="post-header reveal">
+      <p class="crumb">
+        <a class="more-link" href={withBase("/blog")}>
+          <span aria-hidden="true">←</span>Blog
+        </a>
       </p>
       <h1>{post.data.title}</h1>
-      {
-        post.data.tags.length > 0 && (
-          <ul class="tags">
-            {post.data.tags.map((tag) => (
-              <li>
-                <a class="tag" href={withBase(`/blog/tags/${tag}`)}>
-                  {tag}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )
-      }
+      <div class="meta">
+        <p class="label dates">
+          <time datetime={post.data.pubDate.toISOString()}>
+            {formatDate(post.data.pubDate)}
+          </time>
+          {
+            post.data.updatedDate && (
+              <span>Updated {formatDate(post.data.updatedDate)}</span>
+            )
+          }
+          {post.data.draft && <span class="draft">Draft</span>}
+        </p>
+        {
+          post.data.tags.length > 0 && (
+            <ul class="chips">
+              {post.data.tags.map((tag) => (
+                <li>
+                  <a class="chip" href={withBase(`/blog/tags/${tag}`)}>
+                    {tag}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </header>
+
+    {
+      headings.length > 0 && (
+        <div class="post-toc reveal" style="--reveal-delay: 70ms;">
+          <Toc {headings} />
+        </div>
+      )
+    }
+
+    <div class="post-body prose reveal" style="--reveal-delay: 110ms;">
+      <Content />
     </div>
-  </header>
+  </article>
 
-  {
-    headings.length > 0 && (
-      <Row label="Contents" delay={70}>
-        <Toc {headings} />
-      </Row>
-    )
-  }
-
-  <Row wide delay={110}>
-    <article class="prose"><Content /></article>
-  </Row>
-
-  <p class="back">
-    <a href={withBase("/blog")}>
-      <span aria-hidden="true">← </span>All posts
-    </a>
-  </p>
+  <nav
+    class="post-nav reveal"
+    style="--reveal-delay: 150ms;"
+    aria-label="前後の記事"
+  >
+    {
+      (older || newer) && (
+        <div class="neighbours">
+          {older && (
+            <a class="neighbour older" href={withBase(`/blog/${older.id}`)}>
+              <span class="label">
+                <span aria-hidden="true">← </span>Older
+              </span>
+              <span class="neighbour-title">{older.data.title}</span>
+            </a>
+          )}
+          {newer && (
+            <a class="neighbour newer" href={withBase(`/blog/${newer.id}`)}>
+              <span class="label">
+                Newer<span aria-hidden="true"> →</span>
+              </span>
+              <span class="neighbour-title">{newer.data.title}</span>
+            </a>
+          )}
+        </div>
+      )
+    }
+    <p class="all">
+      <a class="more-link" href={withBase("/blog")}>
+        <span aria-hidden="true">←</span>All posts
+      </a>
+    </p>
+  </nav>
 </BaseLayout>
 
 <style>
-  .hero {
-    display: grid;
-    grid-template-columns: var(--label-col) 1fr;
-    gap: 0 var(--sp-6);
-    align-items: start;
-    padding-block: var(--sp-8);
-    animation: rise 420ms ease both;
+  /* The article runs the full measure, and so does its header, so the title
+     and the first line of the body share a left edge. */
+  .post-header {
+    padding-block: var(--sp-6) var(--sp-8);
+  }
+
+  .crumb {
+    margin-bottom: var(--sp-4);
+  }
+
+  h1 {
+    font-size: clamp(1.55rem, 4.2vw, 2.1rem);
+    font-weight: 500;
+    line-height: 1.32;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-4);
+    margin-top: var(--sp-4);
   }
 
   .dates {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: var(--sp-2) var(--sp-3);
-    line-height: 1.5;
+    line-height: 1.7;
   }
 
   .draft {
-    border: var(--rule);
     padding: 0 0.3rem;
+    background: var(--bg-chip);
     color: var(--accent);
   }
 
-  h1 {
-    margin-top: var(--sp-2);
-    font-size: clamp(1.5rem, 4.2vw, 2.05rem);
-    font-weight: 500;
-    line-height: 1.32;
-  }
-
-  .tags {
-    margin: var(--sp-3) 0 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
-  }
-
-  .tag {
-    display: inline-block;
-    border: var(--rule);
-    padding: 0.05rem 0.45rem;
-    color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: var(--fs-label);
-    line-height: 1.7;
-    text-decoration: none;
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  .tag:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-  }
-
-  .back {
-    margin-top: var(--sp-6);
-    padding-top: var(--sp-3);
+  .post-toc {
+    padding-block: var(--sp-5);
     border-top: var(--rule);
   }
 
-  .back a {
-    font-family: var(--font-mono);
-    font-size: var(--fs-meta);
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s ease;
+  .post-body {
+    padding-block: var(--sp-8);
+    border-top: var(--rule);
   }
 
-  .back a:hover {
+  /* --- neighbours --- */
+
+  .post-nav {
+    padding-top: var(--sp-6);
+    border-top: var(--rule);
+  }
+
+  .neighbours {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "older newer";
+    gap: var(--sp-4) var(--sp-6);
+    margin-bottom: var(--sp-6);
+  }
+
+  .neighbour {
+    display: grid;
+    gap: var(--sp-1);
+    min-width: 0;
+    color: var(--fg);
+    text-decoration: none;
+  }
+
+  .neighbour:hover .neighbour-title {
     color: var(--accent);
   }
 
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .older {
+    grid-area: older;
   }
 
-  @media screen and (max-width: 680px) {
-    .hero {
+  .newer {
+    grid-area: newer;
+    text-align: right;
+  }
+
+  .neighbour-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    transition: color 0.2s ease;
+  }
+
+  @media screen and (max-width: 520px) {
+    .neighbours {
       grid-template-columns: 1fr;
-      gap: var(--sp-2);
-      padding-block: var(--sp-6);
+      grid-template-areas:
+        "newer"
+        "older";
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    .hero {
-      animation: none;
+    .newer {
+      text-align: left;
     }
   }
 </style>

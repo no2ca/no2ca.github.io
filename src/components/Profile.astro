@@ -4,47 +4,40 @@ import type { ImageMetadata } from "astro";
 export interface Props {
   myIcon: ImageMetadata;
   name: string;
+  /** One sentence that answers "whose site is this?" before anything else. */
+  tagline: string;
   update: string;
 }
-const { myIcon, name, update } = Astro.props;
+const { myIcon, name, tagline, update } = Astro.props;
 ---
 
-<section class="profile">
-  <div class="avatar">
-    <img src={myIcon.src} alt="" width="100" height="100" />
-  </div>
+<section class="profile reveal">
+  <img class="avatar" src={myIcon.src} alt="" width="88" height="88" />
 
   <div class="content">
     <h1>{name}</h1>
-    <p class="label">Last updated {update}</p>
+    <p class="tagline">{tagline}</p>
+    <p class="label updated">Updated {update}</p>
   </div>
 </section>
 
 <style>
   /* Shares the row grid so the avatar sits in the same column as the labels
-     below it. */
+     below it and the name starts on the content column's left edge. */
   .profile {
     display: grid;
     grid-template-columns: var(--label-col) 1fr;
     gap: 0 var(--sp-6);
     align-items: center;
-    padding-block: var(--sp-8);
-    animation: rise 420ms ease both;
+    padding-block: var(--sp-10);
   }
 
-  .avatar img {
+  .avatar {
     display: block;
-    width: 100px;
-    height: 100px;
+    width: 88px;
+    height: 88px;
     border: var(--rule);
     object-fit: cover;
-  }
-
-  .content {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0 var(--sp-4);
   }
 
   h1 {
@@ -54,42 +47,46 @@ const { myIcon, name, update } = Astro.props;
     letter-spacing: 0.015em;
   }
 
-  .content .label {
-    line-height: 1.6;
+  .tagline {
+    margin-top: var(--sp-2);
+    font-size: var(--fs-lead);
+    text-wrap: pretty;
   }
 
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .updated {
+    margin-top: var(--sp-3);
   }
 
   @media screen and (max-width: 680px) {
+    /* Avatar and name side by side, the tagline running the full width
+       beneath them: a profile card rather than a two-column sheet. */
     .profile {
-      grid-template-columns: 1fr;
-      gap: var(--sp-4);
-      padding-block: var(--sp-6);
+      grid-template-columns: auto 1fr;
+      gap: var(--sp-3) var(--sp-4);
+      padding-block: var(--sp-8);
     }
 
-    .avatar img {
-      width: 88px;
-      height: 88px;
+    .avatar {
+      width: 56px;
+      height: 56px;
     }
 
     .content {
-      flex-direction: column;
-      gap: var(--sp-1);
+      display: contents;
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    .profile {
-      animation: none;
+    h1 {
+      font-size: 1.6rem;
+    }
+
+    .tagline,
+    .updated {
+      grid-column: 1 / -1;
+      margin-top: 0;
+    }
+
+    .updated {
+      margin-top: calc(var(--sp-2) * -1);
     }
   }
 </style>

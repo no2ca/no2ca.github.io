@@ -6,15 +6,20 @@ export interface Props {
   posts: Post[];
   /** Show each post's tags. Off on the home page, where space is tight. */
   showTags?: boolean;
+  /** Puts the dates in a column as wide as the site's label column, so
+      inside a `wide` Row the dates stand where the labels do and the titles
+      line up with every other section's content. Off, the date sits above
+      its title. */
+  timeline?: boolean;
 }
-const { posts, showTags = false } = Astro.props;
+const { posts, showTags = false, timeline = false } = Astro.props;
 ---
 
 {
   posts.length === 0 ? (
     <p class="empty">まだ記事がありません.</p>
   ) : (
-    <ul class="posts">
+    <ul class:list={["posts", { timeline }]}>
       {posts.map((post) => (
         <li class="post">
           <p class="label date">
@@ -23,17 +28,17 @@ const { posts, showTags = false } = Astro.props;
             </time>
             {post.data.draft && <span class="draft">Draft</span>}
           </p>
-          <a class="title" href={withBase(`/blog/${post.id}`)}>
-            {post.data.title}
-          </a>
+          <h3 class="title">
+            <a href={withBase(`/blog/${post.id}`)}>{post.data.title}</a>
+          </h3>
           {post.data.description && (
             <p class="excerpt">{post.data.description}</p>
           )}
           {showTags && post.data.tags.length > 0 && (
-            <ul class="tags">
+            <ul class="chips tags">
               {post.data.tags.map((tag) => (
                 <li>
-                  <a class="tag" href={withBase(`/blog/tags/${tag}`)}>
+                  <a class="chip" href={withBase(`/blog/tags/${tag}`)}>
                     {tag}
                   </a>
                 </li>
@@ -55,75 +60,121 @@ const { posts, showTags = false } = Astro.props;
     gap: var(--sp-6);
   }
 
+  .post {
+    position: relative;
+    display: grid;
+    gap: 0;
+  }
+
+  .post > * {
+    min-width: 0;
+  }
+
   .date {
     display: flex;
     align-items: center;
     gap: var(--sp-2);
+    margin-bottom: var(--sp-1);
     line-height: 1.5;
   }
 
   .draft {
-    border: var(--rule);
     padding: 0 0.3rem;
+    background: var(--bg-chip);
     color: var(--accent);
   }
 
   .title {
-    display: inline-block;
-    margin-top: 0.1rem;
-    font-family: var(--font-display);
-    font-size: 1.13rem;
-    font-weight: 400;
+    font-size: 1.1rem;
+    font-weight: 500;
     letter-spacing: 0.018em;
     line-height: 1.45;
-    color: var(--fg);
-    text-decoration: none;
-    transition:
-      color 0.2s ease,
-      transform 0.2s ease;
   }
 
-  .title:hover {
+  .title a {
+    color: var(--fg);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  /* The title's link covers the whole entry, so a tap anywhere on it opens
+     the post; the tag chips stack above that layer and keep their own
+     destination. */
+  .title a::after {
+    content: "";
+    position: absolute;
+    inset: calc(var(--sp-2) * -1);
+  }
+
+  .post:hover .title a {
     color: var(--accent);
-    transform: translateX(1px);
   }
 
   .excerpt {
-    margin-top: 0.1rem;
+    margin-top: var(--sp-1);
     color: var(--muted);
     font-size: var(--fs-lead);
   }
 
   .tags {
-    margin: var(--sp-2) 0 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
+    margin-top: var(--sp-2);
   }
 
-  .tag {
-    display: inline-block;
-    border: var(--rule);
-    padding: 0.05rem 0.45rem;
-    color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: var(--fs-label);
-    line-height: 1.7;
-    text-decoration: none;
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  .tag:hover {
-    color: var(--accent);
-    border-color: var(--accent);
+  .tags a {
+    position: relative;
+    z-index: 1;
   }
 
   .empty {
     color: var(--muted);
     font-size: var(--fs-lead);
+  }
+
+  /* --- timeline --- */
+
+  .timeline {
+    gap: var(--sp-8);
+  }
+
+  .timeline .post {
+    grid-template-columns: var(--label-col) 1fr;
+    column-gap: var(--sp-6);
+    align-items: baseline;
+  }
+
+  .timeline .post > * {
+    grid-column: 2;
+  }
+
+  /* Written as a child selector to outrank the `> *` rule above it once
+     Astro's scoping attribute is added to both. */
+  .timeline .post > .date {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
+    /* Shares the section label's line-height so the date and the title sit
+       on one baseline. */
+    line-height: var(--lh-body);
+  }
+
+  @media screen and (max-width: 680px) {
+    .timeline {
+      gap: var(--sp-6);
+    }
+
+    .timeline .post {
+      grid-template-columns: 1fr;
+    }
+
+    .timeline .post > * {
+      grid-column: auto;
+    }
+
+    .timeline .post > .date {
+      grid-column: auto;
+      grid-row: auto;
+      margin-bottom: var(--sp-1);
+      line-height: 1.5;
+    }
   }
 </style>

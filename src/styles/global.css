@@ -13,9 +13,9 @@
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 
   /* --- type scale --- */
-  --fs-label: 0.72rem;
-  --fs-meta: 0.88rem;
-  --fs-lead: 0.93rem;
+  --fs-label: 0.75rem;
+  --fs-meta: 0.875rem;
+  --fs-lead: 0.94rem;
   --lh-body: 1.75;
 
   /* --- space scale (4px base) --- */
@@ -23,13 +23,18 @@
   --sp-2: 0.5rem;
   --sp-3: 0.75rem;
   --sp-4: 1rem;
+  --sp-5: 1.25rem;
   --sp-6: 1.5rem;
   --sp-8: 2rem;
+  --sp-10: 2.5rem;
 
   /* --- layout --- */
   --measure: 760px;
+  --gutter: clamp(1.1rem, 4vw, 2rem);
   --label-col: 8.5rem;
   --rule: 1px solid var(--line);
+  /* Smallest comfortable touch target. */
+  --tap: 2.5rem;
 
   /* --- dark palette, defined once and referenced by both dark branches --- */
   --dark-bg: #232323;
@@ -48,6 +53,12 @@
   --accent: #4f6b8f;
   --line: #ccd3dc;
   color-scheme: light;
+
+  /* Derived from the palette so it follows whichever branch is active.
+     Chips sit on this; it is a shade firmer than --bg-soft so a chip still
+     reads as an object without a border. */
+  --bg-chip: color-mix(in oklab, var(--fg) 7%, var(--bg));
+  --bg-chip-hover: color-mix(in oklab, var(--accent) 16%, var(--bg));
 }
 
 /* Explicit dark choice */
@@ -95,6 +106,9 @@ h3 {
   color: var(--fg);
   font-family: var(--font-display);
   letter-spacing: 0.02em;
+  /* Where supported, a two-line heading splits evenly instead of leaving a
+     word or two stranded on the second line. */
+  text-wrap: balance;
 }
 
 h2 {
@@ -111,12 +125,46 @@ a {
   color: inherit;
 }
 
+/* One focus ring for everything; the components never set their own. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   Motion
+   ========================================================= */
+
+/* Sections rise into place on load. Astro leaves keyframe names unscoped,
+   so components reference this one instead of each carrying a copy. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: rise 420ms ease both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+  }
+}
+
 /* =========================================================
    Utilities
    ========================================================= */
 
 /* The mono metadata treatment used throughout: row labels, eyebrows,
-   group titles, periods, the theme toggle. */
+   dates, periods. */
 .label {
   color: var(--muted);
   font-family: var(--font-mono);
@@ -126,23 +174,30 @@ a {
   text-transform: uppercase;
 }
 
-/* The eyebrow that titles a section: the left-hand label of a Row or hero.
-   On wide screens it sits in its own column, where the rule above the row and
-   the horizontal offset are enough to read it as a heading. Once the grid
-   stacks, the label lands directly above its body text with nothing to set it
-   apart, so it gains weight, full contrast and an accent tick. */
+/* The heading of a section: the left-hand column of a Row or hero. It keeps
+   the mono label voice but in full contrast, so each section has an anchor
+   the eye can land on when scanning down the page. */
 .section-label {
+  margin: 0;
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  /* Matches the body line-height so the label and the first line of the
+     content column share a baseline. */
   line-height: var(--lh-body);
 }
 
+/* Once the grid stacks, the label lands directly above its body text with
+   nothing to set it apart, so it gains an accent tick. */
 @media screen and (max-width: 680px) {
   .section-label {
     display: flex;
     align-items: center;
     gap: var(--sp-2);
-    margin-bottom: var(--sp-1);
-    color: var(--fg);
-    font-size: 0.8rem;
+    margin-bottom: var(--sp-3);
     letter-spacing: 0.14em;
     line-height: 1.4;
   }
@@ -154,4 +209,122 @@ a {
     height: 2px;
     background: var(--accent);
   }
+}
+
+/* Chips are only ever links (tags). A keyword that goes nowhere is written
+   as plain text instead, so a chip always promises a destination. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.15rem 0.6rem;
+  background: var(--bg-chip);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.02em;
+  line-height: 1.7;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.chip:hover {
+  color: var(--accent);
+  background: var(--bg-chip-hover);
+}
+
+.chip .count {
+  color: var(--muted);
+  opacity: 0.75;
+}
+
+.chips {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+/* Fingers need more than the chip's text height. */
+@media (pointer: coarse) {
+  .chip {
+    padding-block: 0.3rem;
+  }
+}
+
+/* A quiet, mono "go somewhere" link: View all posts →, ← Blog. The padding
+   makes it a comfortable target without changing how it sits in the flow. */
+.more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-block: -0.35rem;
+  padding-block: 0.35rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.more-link:hover {
+  color: var(--accent);
+}
+
+/* Text links inside running copy. An underline drawn by text-decoration
+   follows wrapped lines, which a border-bottom cannot. */
+.text-link {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition:
+    color 0.2s ease,
+    text-decoration-color 0.2s ease;
+}
+
+.text-link:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+/* Inline keyword list: "OS · Rust · RISC-V". The separator lives in CSS so
+   the markup stays a plain list for assistive tech. */
+.keywords {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.55em;
+  row-gap: 0.15em;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  line-height: 1.7;
+}
+
+/* Trails the item rather than leading the next one, so a wrapped line
+   never starts with a stray dot. */
+.keywords li:not(:last-child)::after {
+  content: "·";
+  margin-left: 0.55em;
+  opacity: 0.6;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }

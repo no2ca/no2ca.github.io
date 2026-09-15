@@ -18,47 +18,88 @@ const isCurrent = (href: string) => {
 ---
 
 <header class="site-header">
-  <a class="home" href={withBase("/")}>no2ca.github.io</a>
+  <div class="bar">
+    <a class="home" href={withBase("/")}>no2ca.github.io</a>
 
-  <nav class="nav" aria-label="サイト内ナビゲーション">
-    {
-      nav.map((item) => (
-        <a
-          class="nav-link label"
-          href={item.href}
-          aria-current={isCurrent(item.href) ? "page" : undefined}
+    <nav class="nav" aria-label="サイト内ナビゲーション">
+      {
+        nav.map((item) => (
+          <a
+            class="nav-link"
+            href={item.href}
+            aria-current={isCurrent(item.href) ? "page" : undefined}
+          >
+            {item.name}
+          </a>
+        ))
+      }
+      <button
+        type="button"
+        class="theme-toggle"
+        data-theme-toggle
+        aria-label="Switch to dark mode"
+        title="Switch to dark mode"
+      >
+        <svg
+          class="icon icon-moon"
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
         >
-          {item.name}
-        </a>
-      ))
-    }
-    <button
-      type="button"
-      class="theme-toggle label"
-      data-theme-toggle
-      aria-live="polite"
-    >
-      <span data-theme-toggle-label>Dark mode</span>
-    </button>
-  </nav>
+          <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"
+          ></path>
+        </svg>
+        <svg
+          class="icon icon-sun"
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="4"></circle>
+          <path
+            d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"
+          ></path>
+        </svg>
+      </button>
+    </nav>
+  </div>
 </header>
 
 <style>
   .site-header {
+    border-bottom: var(--rule);
+  }
+
+  .bar {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    gap: var(--sp-2) var(--sp-4);
-    padding-bottom: var(--sp-3);
-    border-bottom: var(--rule);
+    gap: 0 var(--sp-4);
+    max-width: var(--measure);
+    min-height: 3.5rem;
+    margin: 0 auto;
+    padding-inline: var(--gutter);
   }
 
   /* The site mark: the domain rather than a personal name. Mono keeps it
      reading as an address and sets it apart from the nav labels. */
   .home {
+    padding-block: var(--sp-2);
     font-family: var(--font-mono);
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     letter-spacing: 0.02em;
     color: var(--fg);
     text-decoration: none;
@@ -71,66 +112,93 @@ const isCurrent = (href: string) => {
 
   .nav {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--sp-4);
+    align-items: center;
+    gap: var(--sp-1);
+    /* Lets the last control's padding hang past the measure so its icon,
+       not its hit area, lines up with the right edge of the content. */
+    margin-right: calc(var(--sp-2) * -1);
   }
 
+  /* Every control in the bar is at least --tap on the short side; the text
+     stays small but the finger gets the whole box. */
   .nav-link {
-    padding-bottom: 0.1rem;
-    border-bottom: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding-inline: var(--sp-3);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     text-decoration: none;
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
+    text-underline-offset: 0.55em;
+    text-decoration-thickness: 1.5px;
+    transition: color 0.2s ease;
   }
 
   .nav-link[aria-current="page"] {
     color: var(--fg);
-    border-bottom-color: var(--line);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
   }
 
   .nav-link:hover {
     color: var(--accent);
-    border-bottom-color: var(--accent);
   }
 
   .theme-toggle {
-    border: var(--rule);
+    display: grid;
+    place-items: center;
+    width: var(--tap);
+    height: var(--tap);
+    padding: 0;
+    border: 0;
     background: transparent;
-    padding: 0.18rem 0.5rem;
-    line-height: 1.5;
+    color: var(--muted);
     cursor: pointer;
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
+    transition: color 0.2s ease;
   }
 
   .theme-toggle:hover {
     color: var(--accent);
-    border-color: var(--accent);
   }
 
-  @media screen and (max-width: 520px) {
-    .site-header {
-      flex-direction: column;
-      align-items: stretch;
+  .icon {
+    display: block;
+  }
+
+  /* The icon shows the mode you would switch *to*, picked by the same
+     branches that pick the palette so it is right on the very first paint. */
+  .icon-sun {
+    display: none;
+  }
+
+  :root[data-theme="dark"] .icon-sun {
+    display: block;
+  }
+
+  :root[data-theme="dark"] .icon-moon {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .icon-sun {
+      display: block;
     }
 
-    /* Without this the header's `align-items: stretch` widens the link to
-       the full row, making the whole line clickable. */
+    :root:not([data-theme="light"]) .icon-moon {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 420px) {
     .home {
-      align-self: flex-start;
+      font-size: 0.84rem;
     }
 
-    .nav {
-      width: 100%;
-    }
-
-    /* Keeps the two nav links grouped on the left with the toggle pinned
-       right, rather than scattering all three across the row. */
-    .theme-toggle {
-      margin-left: auto;
+    .nav-link {
+      padding-inline: var(--sp-2);
     }
   }
 </style>

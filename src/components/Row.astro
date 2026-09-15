@@ -1,29 +1,37 @@
 ---
 export interface Props {
   label?: string;
+  /** Anchor target, for in-page navigation. */
+  id?: string;
   /** Entrance animation offset, in ms. */
   delay?: number;
   /** Drops the label column so the body spans the full measure — for long
       running content such as an article body. */
   wide?: boolean;
 }
-const { label, delay = 0, wide = false } = Astro.props;
+const { label, id, delay = 0, wide = false } = Astro.props;
 ---
 
-<section class:list={["row", { wide }]} style={`--reveal-delay: ${delay}ms;`}>
-  {label && <p class="label section-label">{label}</p>}
+<section
+  class:list={["row", "reveal", { wide }]}
+  {id}
+  style={`--reveal-delay: ${delay}ms;`}
+>
+  {label && <h2 class="section-label">{label}</h2>}
   <div class="row-body"><slot /></div>
 </section>
 
 <style>
+  /* A section is a rule, then a label column beside a content column. The
+     rule is the only horizontal line on the page that means "new section",
+     so nothing inside a row draws another one. */
   .row {
     display: grid;
     grid-template-columns: var(--label-col) 1fr;
     gap: 0 var(--sp-6);
-    padding-block: var(--sp-6);
+    padding-block: var(--sp-8);
     border-top: var(--rule);
-    animation: rise 420ms ease both;
-    animation-delay: var(--reveal-delay, 0ms);
+    scroll-margin-top: var(--sp-4);
   }
 
   /* Pinned to the content column so a label-less Row does not fall back into
@@ -41,32 +49,15 @@ const { label, delay = 0, wide = false } = Astro.props;
     grid-column: auto;
   }
 
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
   @media screen and (max-width: 680px) {
     .row {
       grid-template-columns: 1fr;
-      gap: var(--sp-2);
-      padding-block: var(--sp-4);
+      gap: 0;
+      padding-block: var(--sp-6);
     }
 
     .row-body {
       grid-column: auto;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .row {
-      animation: none;
     }
   }
 </style>

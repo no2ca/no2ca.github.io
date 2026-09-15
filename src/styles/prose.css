@@ -38,6 +38,14 @@
   font-weight: 500;
 }
 
+/* An article that opens with a heading would otherwise draw a second rule
+   right under the one the layout already put above the body. */
+.prose > h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
 .prose h3 {
   margin-top: var(--sp-6);
   font-size: 1.06rem;
@@ -70,18 +78,22 @@
   margin-top: var(--sp-1);
 }
 
+/* Underlined with text-decoration rather than a border so the line follows
+   a link that wraps. */
 .prose a {
   color: var(--fg);
-  text-decoration: none;
-  border-bottom: var(--rule);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
   transition:
     color 0.2s ease,
-    border-color 0.2s ease;
+    text-decoration-color 0.2s ease;
 }
 
 .prose a:hover {
   color: var(--accent);
-  border-color: var(--accent);
+  text-decoration-color: var(--accent);
 }
 
 .prose strong {
@@ -121,17 +133,17 @@
 
 /* --- code --- */
 
+/* Code sits on a surface, not inside a border, so the only lines drawn in
+   an article are the section rules above h2s. */
 .prose :not(pre) > code {
-  border: var(--rule);
-  background: var(--bg-soft);
-  padding: 0.1em 0.35em;
+  background: var(--bg-chip);
+  padding: 0.1em 0.4em;
   font-family: var(--font-mono);
   font-size: 0.88em;
 }
 
 .prose pre {
-  padding: var(--sp-4);
-  border: var(--rule);
+  padding: var(--sp-4) var(--sp-5);
   overflow-x: auto;
   font-size: var(--fs-meta);
   line-height: 1.7;
@@ -194,6 +206,10 @@
   padding: var(--sp-2) var(--sp-3);
   text-align: left;
   vertical-align: top;
+  /* CJK text can break between any two characters, which lets a narrow
+     screen squeeze a cell to one character per line. Breaking only at
+     spaces keeps short cells whole and lets the table scroll instead. */
+  word-break: keep-all;
 }
 
 .prose th {
