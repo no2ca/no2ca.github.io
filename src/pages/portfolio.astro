@@ -7,49 +7,109 @@ import Keywords from "../components/Keywords.astro";
 const profile = {
   name: "nonica",
   handle: "no2ca",
-  role: "Systems & Low-level Software",
+  role: "Infrastructure & Systems Software",
   location: "Yokohama, Japan",
-  date: "2026-09-08",
+  date: "2026-09-23",
 };
 
 // One line under the name so the page can be understood without scrolling.
 const summary =
-  "OS・コンパイラ・ベアメタル実装を中心としたシステムソフトウェア開発の経歴と成果物。";
+  "Kubernetes ネットワークを中心としたインフラと、OS・ハイパーバイザなど低レイヤの開発の経歴と成果物です。";
 
 const skillGroups = [
-  { title: "Languages", items: ["Rust", "C", "C++"] },
+  { title: "Languages", items: ["Go", "Rust", "C", "C++", "Haskell"] },
+  {
+    title: "Infrastructure",
+    items: ["Kubernetes", "Cilium", "CNI", "AWS", "Terraform"],
+  },
   {
     title: "Systems",
-    items: ["Operating Systems", "RV64", "x86-64", "AArch64", "Hypervisor"],
+    items: [
+      "Hypervisor",
+      "Bare Metal",
+      "eBPF",
+      "Intel TDX / TEE",
+      "Linux Kernel Modules",
+      "AArch64",
+      "RV64",
+      "x86-64",
+    ],
   },
   { title: "Tools", items: ["Git", "Linux", "QEMU", "Docker"] },
 ];
 
-const projects = [
+// Current work leads; the earlier low-level projects follow as the
+// groundwork it builds on. Leave `github` empty for a private repository.
+const projectSections = [
   {
-    name: "RV64 Operating System",
-    what: "RV64 上で動作する最小カーネルを実装。仮想メモリ、ページング、トラップ処理、ELF ローダ、システムコール（create/yield/exit）を構築。",
-    tech: ["Rust", "RV64", "QEMU", "Kernel Development"],
-    github: "https://github.com/no2ca/nex_os",
-    demo: "",
+    id: "projects",
+    label: "Projects",
+    projects: [
+      {
+        name: "User-space TCP/IP Stack",
+        what: "Go によるユーザ空間 TCP/IP スタック。TUN の読み書き、IPv4 のパースと組み立て（チェックサム含む）、TCP ヘッダのパースとシリアライズを実装し、TCP 状態機械は CLOSED / LISTEN / SYN-RECEIVED / ESTABLISHED まで動作します。",
+        tech: ["Go", "TCP/IP", "TUN", "Linux"],
+        github: "https://github.com/no2ca/go-tuntcp",
+        demo: "",
+      },
+      {
+        name: "Typed Lambda Calculus in Haskell",
+        what: "TAPL を読みながら章ごとに処理系を Haskell で実装。算術式から着手し、単純型付きラムダ計算とその拡張までを今学期の目標としています。",
+        tech: ["Haskell", "Type Systems"],
+        github: "https://github.com/no2ca/tapl-hs",
+        demo: "",
+      },
+    ],
   },
   {
-    name: "C Subset Compiler",
-    what: "x86-64 Linux（SysV ABI, ELF）向け C サブセットコンパイラを実装。lexer / parser / AST / IR / 線形スキャンレジスタ割当 / Intel 構文コード生成まで対応。",
-    tech: ["Rust", "x86-64", "Linux", "Compiler"],
-    github: "https://github.com/no2ca/nonicc",
-    demo: "",
-  },
-  {
-    name: "x86 Bootloader & Game of Life Runtime",
-    what: "独自 x86 ブートローダを開発し、OS 非依存で Rust 製ライフゲームをロード・実行。メモリレイアウトとバイナリローディングを自前で構成。",
-    tech: ["Rust", "x86 Assembly", "Bare Metal"],
-    github: "https://github.com/no2ca/lifegame",
-    demo: "",
+    id: "earlier-work",
+    label: "Earlier Work",
+    projects: [
+      {
+        name: "AArch64 Hypervisor",
+        what: "書籍を参考に Rust で AArch64 向け Type-1 ハイパーバイザを実装し、Raspberry Pi 4 へ移植。",
+        tech: ["Rust", "AArch64", "Raspberry Pi 4", "Hypervisor"],
+        github: "https://github.com/no2ca/min1visor",
+        demo: "",
+      },
+      {
+        name: "RV64 Operating System",
+        what: "RV64 上で動作する最小カーネルを実装。仮想メモリ、ページング、トラップ処理、ELF ローダ、システムコール（create/yield/exit）を構築。",
+        tech: ["Rust", "RV64", "QEMU", "Kernel Development"],
+        github: "https://github.com/no2ca/nex_os",
+        demo: "",
+      },
+      {
+        name: "C Subset Compiler",
+        what: "x86-64 Linux（SysV ABI, ELF）向け C サブセットコンパイラを実装。lexer / parser / AST / IR / 線形スキャンレジスタ割当 / Intel 構文コード生成まで対応。",
+        tech: ["Rust", "x86-64", "Linux", "Compiler"],
+        github: "https://github.com/no2ca/nonicc",
+        demo: "",
+      },
+      {
+        name: "x86 Bootloader & Game of Life Runtime",
+        what: "独自 x86 ブートローダを開発し、OS 非依存で Rust 製ライフゲームをロード・実行。メモリレイアウトとバイナリローディングを自前で構成。",
+        tech: ["Rust", "x86 Assembly", "Bare Metal"],
+        github: "https://github.com/no2ca/lifegame",
+        demo: "",
+      },
+    ],
   },
 ];
 
 const experiences = [
+  {
+    period: "2026年8月",
+    title: "サイボウズ株式会社（インターン）",
+    detail:
+      "Kubernetes のネットワーク領域で、CNI チェイニングの一本化、Cilium の BGP 広告機能の導入、独自 CNI の一部機能の再統合、ルーティングテーブルに出力するカスタムコントローラーの組み込みに取り組んだ。",
+  },
+  {
+    period: "2026年8月",
+    title: "セキュリティキャンプ全国大会2026 TEEゼミ「CVM ビルド&スクラップ」",
+    detail:
+      "応募課題で Intel TDX をはじめとする TEE を調査。実習では Confidential VM を対象に、ディスクロールバック攻撃や構造体パディング領域からの情報流出を検証し、eBPF とカーネルモジュールで TDX 特有のイベントをフックする実装に取り組んだ。",
+  },
   {
     period: "2026年3月",
     title: "セキュリティキャンプ2026 コネクト（OSクラス）",
@@ -58,9 +118,9 @@ const experiences = [
   },
   {
     period: "2025 - Present",
-    title: "個人開発（システムソフトウェア）",
+    title: "個人開発（システムソフトウェア・インフラ）",
     detail:
-      "OS・コンパイラ・ベアメタル実装を継続。GitHub で開発履歴と成果物を公開。",
+      "OS・コンパイラ・ハイパーバイザなどの低レイヤから、Go によるネットワーク・インフラへと対象を広げて継続。GitHub で開発履歴と成果物を公開。",
   },
   {
     period: "2025年5月 - 2025年12月",
@@ -123,44 +183,46 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
     </dl>
   </Row>
 
-  <Row id="projects" label="Projects" delay={110}>
-    <ul class="projects">
-      {
-        projects.map((project) => (
-          <li class="project">
-            <h3>
-              {project.github ? (
-                <a href={project.github} target="_blank" rel="noreferrer">
-                  {project.name}
-                  <span class="arrow" aria-hidden="true">
-                    ↗
-                  </span>
-                </a>
-              ) : (
-                project.name
-              )}
-            </h3>
-            <p class="project-what">{project.what}</p>
-            <div class="project-foot">
-              <Keywords items={project.tech} />
-              {project.demo && (
-                <a
-                  class="text-link demo"
-                  href={project.demo}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Demo<span aria-hidden="true"> ↗</span>
-                </a>
-              )}
-            </div>
-          </li>
-        ))
-      }
-    </ul>
-  </Row>
+  {
+    projectSections.map((section, i) => (
+      <Row id={section.id} label={section.label} delay={110 + i * 40}>
+        <ul class="projects">
+          {section.projects.map((project) => (
+            <li class="project">
+              <h3>
+                {project.github ? (
+                  <a href={project.github} target="_blank" rel="noreferrer">
+                    {project.name}
+                    <span class="arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  </a>
+                ) : (
+                  project.name
+                )}
+              </h3>
+              <p class="project-what">{project.what}</p>
+              <div class="project-foot">
+                <Keywords items={project.tech} />
+                {project.demo && (
+                  <a
+                    class="text-link demo"
+                    href={project.demo}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Demo<span aria-hidden="true"> ↗</span>
+                  </a>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Row>
+    ))
+  }
 
-  <Row id="experience" label="Experience" delay={150}>
+  <Row id="experience" label="Experience" delay={190}>
     <ol class="history">
       {
         experiences.map((item) => (
@@ -176,7 +238,7 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
     </ol>
   </Row>
 
-  <Row id="education" label="Education" delay={190}>
+  <Row id="education" label="Education" delay={230}>
     <div class="entry">
       <p class="label period">{education.expected}</p>
       <div class="entry-body">
@@ -190,7 +252,7 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
     </div>
   </Row>
 
-  <Row id="contact" label="Contact" delay={230}>
+  <Row id="contact" label="Contact" delay={270}>
     <dl class="spec">
       {
         contacts.map((contact) => (

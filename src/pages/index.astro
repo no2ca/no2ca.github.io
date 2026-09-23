@@ -10,27 +10,39 @@ import { withBase } from "../lib/url";
 import { getPosts } from "../lib/posts";
 
 const name = "nonica";
-const update = "2026-09-08";
+const update = "2026-09-23";
 
 // The one place the site introduces itself; /portfolio no longer repeats it.
 // The tagline sits under the name so the first glance answers who this is;
 // About and Now each carry one thing, so they can be picked up at a scan.
-const tagline = "低レイヤ / OS開発を中心に学んでいる大学3年生です.";
+const tagline =
+  "低レイヤを土台に、クラウドネイティブ/インフラの分野を学んでいる大学3年生です。";
 const about =
-  "慶應義塾大学 環境情報学部に在籍し、OS・コンパイラ・コンピュータアーキテクチャを中心に、Rust と C で実装しながら内部構造を理解するスタイルで開発しています.";
-const now = "現在は AArch64 向けハイパーバイザを継続開発中です.";
+  "慶應義塾大学 環境情報学部に在籍しています。これまで OS・コンパイラ・ハイパーバイザといった低レイヤを、Rustで実装しながら内部構造を理解するスタイルで学んできました。" +
+  "最近はその経験を実際のサービスやインフラに活かすことに関心が広がり、Kubernetes・ネットワーク・クラウド・SRE を中心に、Go で手を動かしながら学んでいます。";
+const now =
+  "現在は Go でユーザ空間の TCP/IP スタック (go-tuntcp) を自作しながら、Terraform で AWS 環境を実務に近い構成で組む練習をしています。" +
+  "研究会では言語処理系をテーマに、TAPL を読みつつ単純型付きラムダ計算とその拡張を Haskell で実装することを目標に取り組んでいます。";
 
-const interests = ["OS", "Rust", "RISC-V", "x86", "Compiler"];
+const interests = [
+  "Go",
+  "Rust",
+  "Kubernetes",
+  "Network",
+  "OS / Virtualization",
+  "TEE",
+  "Programming Languages",
+];
 
 const links = [
   { name: "GitHub", url: "https://github.com/no2ca" },
   { name: "Cosense (Scrapbox)", url: "https://cosen.se/nonica" },
   { name: "Qiita", url: "https://qiita.com/nonica" },
+  { name: "X", url: "https://x.com/no2cax" },
   {
     name: "Bluesky",
     url: "https://bsky.app/profile/did:plc:wvwzypmkkewmn3yaedrpzncd",
   },
-  { name: "X", url: "https://x.com/no2cax" },
 ];
 
 const latestPosts = (await getPosts()).slice(0, 3);
