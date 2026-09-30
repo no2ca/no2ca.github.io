@@ -7,14 +7,10 @@ import Keywords from "../components/Keywords.astro";
 const profile = {
   name: "nonica",
   handle: "no2ca",
-  role: "Infrastructure & Systems Software",
   location: "Yokohama, Japan",
-  date: "2026-09-23",
+  date: "2026-09-30",
 };
 
-// One line under the name so the page can be understood without scrolling.
-const summary =
-  "Kubernetes ネットワークを中心としたインフラと、OS・ハイパーバイザなど低レイヤの開発の経歴と成果物です。";
 
 const skillGroups = [
   { title: "Languages", items: ["Go", "Rust", "C", "C++", "Haskell"] },
@@ -120,7 +116,7 @@ const experiences = [
     period: "2025 - Present",
     title: "個人開発（システムソフトウェア・インフラ）",
     detail:
-      "OS・コンパイラ・ハイパーバイザなどの低レイヤから、Go によるネットワーク・インフラへと対象を広げて継続。GitHub で開発履歴と成果物を公開。",
+      "OS・コンパイラ・ハイパーバイザなどの低レイヤから、Go によるネットワーク・インフラへと対象を広げて継続。",
   },
   {
     period: "2025年5月 - 2025年12月",
@@ -133,11 +129,6 @@ const education = {
   school: "慶應義塾大学",
   faculty: "環境情報学部 学士課程",
   expected: "2028年3月卒業予定",
-  courses: [
-    "Computer Architecture",
-    "Operating Systems",
-    "Software Architecture",
-  ],
 };
 
 const contacts = [
@@ -154,17 +145,15 @@ const contacts = [
   { label: "X", text: "@no2cax", url: "https://x.com/no2cax" },
 ];
 
-const description = `${profile.name}（${profile.handle}）のポートフォリオ。${summary}`;
+const description = `${profile.name}（${profile.handle}）のポートフォリオ。`;
 ---
 
 <BaseLayout title="nonica | Portfolio" {description}>
   <PageHero label="Portfolio" title={profile.name}>
     <ul class="meta keywords">
       <li>{profile.handle}</li>
-      <li>{profile.role}</li>
       <li>{profile.location}</li>
     </ul>
-    <p class="summary">{summary}</p>
     <p class="label hero-date">Updated {profile.date}</p>
   </PageHero>
 
@@ -246,7 +235,6 @@ const description = `${profile.name}（${profile.handle}）のポートフォリ
         <p class="entry-detail">{education.faculty}</p>
         <div class="coursework">
           <p class="label">Coursework</p>
-          <Keywords items={education.courses} />
         </div>
       </div>
     </div>
