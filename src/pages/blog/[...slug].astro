@@ -123,17 +123,16 @@ const description =
   /* The article runs the full measure, and so does its header, so the title
      and the first line of the body share a left edge. */
   .post-header {
-    padding-block: var(--sp-6) var(--sp-8);
+    padding-block: var(--sp-12) var(--hero-space-bottom);
   }
 
   .crumb {
-    margin-bottom: var(--sp-4);
+    margin-bottom: var(--sp-8);
   }
 
   h1 {
-    font-size: clamp(1.55rem, 4.2vw, 2.1rem);
+    font-size: clamp(1.45rem, 3.8vw, 1.85rem);
     font-weight: 500;
-    line-height: 1.32;
   }
 
   .meta {
@@ -141,7 +140,7 @@ const description =
     flex-wrap: wrap;
     align-items: center;
     gap: var(--sp-2) var(--sp-4);
-    margin-top: var(--sp-4);
+    margin-top: var(--sp-5);
   }
 
   .dates {
@@ -159,19 +158,19 @@ const description =
   }
 
   .post-toc {
-    padding-block: var(--sp-5);
+    padding-block: var(--sp-8);
     border-top: var(--rule);
   }
 
   .post-body {
-    padding-block: var(--sp-8);
+    padding-block: var(--section-space) var(--sp-16);
     border-top: var(--rule);
   }
 
   /* --- neighbours --- */
 
   .post-nav {
-    padding-top: var(--sp-6);
+    padding-top: var(--sp-8);
     border-top: var(--rule);
   }
 
@@ -179,13 +178,13 @@ const description =
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-areas: "older newer";
-    gap: var(--sp-4) var(--sp-6);
-    margin-bottom: var(--sp-6);
+    gap: var(--sp-6);
+    margin-bottom: var(--sp-8);
   }
 
   .neighbour {
     display: grid;
-    gap: var(--sp-1);
+    gap: var(--sp-2);
     min-width: 0;
     color: var(--fg);
     text-decoration: none;
@@ -206,8 +205,8 @@ const description =
 
   .neighbour-title {
     font-family: var(--font-display);
-    font-size: var(--fs-lead);
-    line-height: 1.5;
+    font-size: var(--fs-body);
+    line-height: var(--lh-heading);
     transition: color 0.2s ease;
   }
 

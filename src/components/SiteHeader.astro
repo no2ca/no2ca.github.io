@@ -89,7 +89,7 @@ const isCurrent = (href: string) => {
     justify-content: space-between;
     gap: 0 var(--sp-4);
     max-width: var(--measure);
-    min-height: 3.5rem;
+    min-height: 4rem;
     margin: 0 auto;
     padding-inline: var(--gutter);
   }
@@ -99,7 +99,7 @@ const isCurrent = (href: string) => {
   .home {
     padding-block: var(--sp-2);
     font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-size: var(--fs-meta);
     letter-spacing: 0.02em;
     color: var(--fg);
     text-decoration: none;
@@ -129,10 +129,10 @@ const isCurrent = (href: string) => {
     color: var(--muted);
     font-family: var(--font-mono);
     font-size: var(--fs-label);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     text-decoration: none;
-    text-underline-offset: 0.55em;
+    text-underline-offset: 0.6em;
     text-decoration-thickness: 1.5px;
     transition: color 0.2s ease;
   }
@@ -193,8 +193,12 @@ const isCurrent = (href: string) => {
   }
 
   @media screen and (max-width: 420px) {
+    .bar {
+      min-height: 3.5rem;
+    }
+
     .home {
-      font-size: 0.84rem;
+      font-size: var(--fs-small);
     }
 
     .nav-link {

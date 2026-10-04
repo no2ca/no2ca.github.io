@@ -20,13 +20,14 @@ const { label, title, size = "large" } = Astro.props;
 </header>
 
 <style>
-  /* Mirrors the Row grid so the eyebrow lines up with the labels below it. */
+  /* Mirrors the Row grid so the eyebrow lines up with the labels below it,
+     and sits on the title's baseline the way those labels do on theirs. */
   .hero {
     display: grid;
     grid-template-columns: var(--label-col) 1fr;
     gap: 0 var(--sp-6);
-    align-items: start;
-    padding-block: var(--sp-10);
+    align-items: baseline;
+    padding-block: var(--hero-space-top) var(--hero-space-bottom);
   }
 
   .hero-body {
@@ -39,20 +40,19 @@ const { label, title, size = "large" } = Astro.props;
   }
 
   .large h1 {
-    font-size: clamp(1.9rem, 5.5vw, 2.5rem);
-    line-height: 1.15;
+    font-size: clamp(1.75rem, 5vw, 2.25rem);
+    line-height: 1.2;
   }
 
   .small h1 {
-    font-size: clamp(1.4rem, 3.5vw, 1.8rem);
-    line-height: 1.35;
+    font-size: clamp(1.35rem, 3.4vw, 1.65rem);
+    line-height: 1.4;
   }
 
   @media screen and (max-width: 680px) {
     .hero {
       grid-template-columns: 1fr;
       gap: 0;
-      padding-block: var(--sp-8);
     }
 
     .hero-body {
