@@ -11,31 +11,42 @@
   margin: 0;
 }
 
+/* A paragraph break is close to one line of text, so it reads as a pause
+   rather than a gap. */
 .prose > * + * {
-  margin-top: var(--sp-4);
+  margin-top: var(--sp-6);
 }
 
-/* Code blocks read as their own object, so they get more air than a plain
-   paragraph break on both sides. */
-.prose > * + pre,
-.prose > pre + * {
-  margin-top: var(--sp-6);
+/* Blocks that sit on a surface (code, tables, quotes, figures) read as
+   their own objects, so they get more air than a paragraph break on both
+   sides. */
+.prose > * + :is(pre, table, blockquote, figure),
+.prose > :is(pre, table, blockquote, figure) + * {
+  margin-top: var(--sp-8);
 }
 
 .prose h2,
 .prose h3,
 .prose h4 {
   font-family: var(--font-display);
-  line-height: 1.45;
+  line-height: var(--lh-heading);
   letter-spacing: 0.02em;
 }
 
+/* A heading belongs to what follows it, so the space above it is several
+   times the space below. */
 .prose h2 {
-  margin-top: var(--sp-8);
-  padding-top: var(--sp-3);
+  margin-top: var(--sp-14);
+  padding-top: var(--sp-6);
   border-top: var(--rule);
-  font-size: 1.24rem;
+  font-size: 1.25rem;
   font-weight: 500;
+}
+
+/* Listed after the block rules above so a code block straight under a
+   heading still sits close to it. */
+.prose > :is(h2, h3, h4) + * {
+  margin-top: var(--sp-4);
 }
 
 /* An article that opens with a heading would otherwise draw a second rule
@@ -47,35 +58,39 @@
 }
 
 .prose h3 {
-  margin-top: var(--sp-6);
-  font-size: 1.06rem;
+  margin-top: var(--sp-12);
+  font-size: 1.0625rem;
   font-weight: 500;
 }
 
 .prose h4 {
-  margin-top: var(--sp-6);
-  font-size: 0.98rem;
+  margin-top: var(--sp-10);
+  font-size: var(--fs-body);
   font-weight: 500;
   color: var(--muted);
 }
 
 /* Anchor targets clear the top of the viewport when jumping from the TOC. */
 .prose :is(h2, h3, h4) {
-  scroll-margin-top: var(--sp-6);
+  scroll-margin-top: var(--sp-8);
 }
 
 .prose ul,
 .prose ol {
-  padding-left: 1.4rem;
+  padding-left: 1.5rem;
+}
+
+.prose li::marker {
+  color: var(--muted);
 }
 
 .prose li + li {
-  margin-top: var(--sp-1);
+  margin-top: var(--sp-2);
 }
 
 .prose li > ul,
 .prose li > ol {
-  margin-top: var(--sp-1);
+  margin-top: var(--sp-2);
 }
 
 /* Underlined with text-decoration rather than a border so the line follows
@@ -102,20 +117,26 @@
 
 .prose blockquote {
   margin-inline: 0;
-  padding: var(--sp-3) var(--sp-4);
+  padding: var(--sp-4) var(--sp-6);
   border-left: 2px solid var(--line);
   background: var(--bg-soft);
   color: var(--muted);
 }
 
 .prose blockquote > * + * {
-  margin-top: var(--sp-2);
+  margin-top: var(--sp-3);
 }
 
 .prose hr {
   border: 0;
   border-top: var(--rule);
-  margin-block: var(--sp-8);
+}
+
+/* A bare rule is a section break without a heading: the same air above
+   it as an h2's rule, and as much again below. */
+.prose > hr,
+.prose > hr + * {
+  margin-top: var(--sp-14);
 }
 
 .prose img {
@@ -126,7 +147,7 @@
 }
 
 .prose figcaption {
-  margin-top: var(--sp-2);
+  margin-top: var(--sp-3);
   color: var(--muted);
   font-size: var(--fs-meta);
 }
@@ -137,16 +158,18 @@
    an article are the section rules above h2s. */
 .prose :not(pre) > code {
   background: var(--bg-chip);
-  padding: 0.1em 0.4em;
+  padding: 0.15em 0.4em;
   font-family: var(--font-mono);
-  font-size: 0.88em;
+  font-size: 0.87em;
+  letter-spacing: 0;
 }
 
 .prose pre {
-  padding: var(--sp-4) var(--sp-5);
+  padding: var(--sp-5) var(--sp-6);
   overflow-x: auto;
   font-size: var(--fs-meta);
-  line-height: 1.7;
+  line-height: 1.75;
+  letter-spacing: 0;
   tab-size: 2;
 }
 
@@ -203,7 +226,7 @@
 
 .prose :is(th, td) {
   border: var(--rule);
-  padding: var(--sp-2) var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
   text-align: left;
   vertical-align: top;
   /* CJK text can break between any two characters, which lets a narrow

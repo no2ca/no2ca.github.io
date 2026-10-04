@@ -12,11 +12,20 @@
     sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 
-  /* --- type scale --- */
-  --fs-label: 0.75rem;
-  --fs-meta: 0.875rem;
-  --fs-lead: 0.94rem;
-  --lh-body: 1.75;
+  /* --- type scale ---
+     Body copy is 15px: small enough that a line of Japanese holds 35-45
+     characters at the measure, large enough to read without effort. Each
+     step below it is one pixel apart, so secondary text recedes without
+     ever dropping out of reach. */
+  --fs-label: 0.6875rem; /* 11px: uppercase mono labels */
+  --fs-small: 0.75rem; /* 12px: chips, lowercase mono */
+  --fs-meta: 0.8125rem; /* 13px: metadata, code, footer */
+  --fs-lead: 0.875rem; /* 14px: secondary copy under a title */
+  --fs-body: 0.9375rem; /* 15px */
+  --lh-body: 1.85;
+  /* Headings run tighter than prose; a longer line-height on a short line
+     only pushes the heading away from the text it introduces. */
+  --lh-heading: 1.45;
 
   /* --- space scale (4px base) --- */
   --sp-1: 0.25rem;
@@ -27,6 +36,17 @@
   --sp-6: 1.5rem;
   --sp-8: 2rem;
   --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-14: 3.5rem;
+  --sp-16: 4rem;
+
+  /* --- vertical rhythm ---
+     The gap between sections is the largest on the page, so the rules
+     that divide them sit in clear air and the eye reads each one as a
+     separate block. */
+  --section-space: var(--sp-14);
+  --hero-space-top: var(--sp-16);
+  --hero-space-bottom: var(--sp-14);
 
   /* --- layout --- */
   --measure: 760px;
@@ -59,6 +79,15 @@
      reads as an object without a border. */
   --bg-chip: color-mix(in oklab, var(--fg) 7%, var(--bg));
   --bg-chip-hover: color-mix(in oklab, var(--accent) 16%, var(--bg));
+}
+
+/* A phone screen is short, so the same rhythm in smaller steps. */
+@media screen and (max-width: 680px) {
+  :root {
+    --section-space: var(--sp-10);
+    --hero-space-top: var(--sp-12);
+    --hero-space-bottom: var(--sp-10);
+  }
 }
 
 /* Explicit dark choice */
@@ -106,15 +135,15 @@ h3 {
   color: var(--fg);
   font-family: var(--font-display);
   letter-spacing: 0.02em;
+  line-height: var(--lh-heading);
   /* Where supported, a two-line heading splits evenly instead of leaving a
      word or two stranded on the second line. */
   text-wrap: balance;
 }
 
 h2 {
-  font-size: clamp(1.12rem, 2.8vw, 1.32rem);
+  font-size: clamp(1.05rem, 2.6vw, 1.2rem);
   font-weight: 500;
-  line-height: 1.45;
 }
 
 p {
@@ -183,11 +212,11 @@ a {
   font-family: var(--font-mono);
   font-size: var(--fs-label);
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  /* Matches the body line-height so the label and the first line of the
-     content column share a baseline. */
-  line-height: var(--lh-body);
+  /* The grids that hold a label align on baselines, so this only sets the
+     label's own box. */
+  line-height: 1.5;
 }
 
 /* Once the grid stacks, the label lands directly above its body text with
@@ -197,9 +226,8 @@ a {
     display: flex;
     align-items: center;
     gap: var(--sp-2);
-    margin-bottom: var(--sp-3);
+    margin-bottom: var(--sp-5);
     letter-spacing: 0.14em;
-    line-height: 1.4;
   }
 
   .section-label::before {
@@ -221,9 +249,9 @@ a {
   background: var(--bg-chip);
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: var(--fs-label);
+  font-size: var(--fs-small);
   letter-spacing: 0.02em;
-  line-height: 1.7;
+  line-height: 1.8;
   text-decoration: none;
   transition:
     color 0.2s ease,
@@ -302,11 +330,11 @@ a {
   display: flex;
   flex-wrap: wrap;
   column-gap: 0.55em;
-  row-gap: 0.15em;
+  row-gap: 0.2em;
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: var(--fs-meta);
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 /* Trails the item rather than leading the next one, so a wrapped line

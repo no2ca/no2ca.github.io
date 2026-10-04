@@ -24,12 +24,14 @@ const { label, id, delay = 0, wide = false } = Astro.props;
 <style>
   /* A section is a rule, then a label column beside a content column. The
      rule is the only horizontal line on the page that means "new section",
-     so nothing inside a row draws another one. */
+     so nothing inside a row draws another one. The label sits on the
+     baseline of the content's first line, whatever size that line is. */
   .row {
     display: grid;
     grid-template-columns: var(--label-col) 1fr;
     gap: 0 var(--sp-6);
-    padding-block: var(--sp-8);
+    align-items: baseline;
+    padding-block: var(--section-space);
     border-top: var(--rule);
     scroll-margin-top: var(--sp-4);
   }
@@ -53,7 +55,6 @@ const { label, id, delay = 0, wide = false } = Astro.props;
     .row {
       grid-template-columns: 1fr;
       gap: 0;
-      padding-block: var(--sp-6);
     }
 
     .row-body {

@@ -57,7 +57,7 @@ const { posts, showTags = false, timeline = false } = Astro.props;
     padding: 0;
     list-style: none;
     display: grid;
-    gap: var(--sp-6);
+    gap: var(--sp-10);
   }
 
   .post {
@@ -74,7 +74,7 @@ const { posts, showTags = false, timeline = false } = Astro.props;
     display: flex;
     align-items: center;
     gap: var(--sp-2);
-    margin-bottom: var(--sp-1);
+    margin-bottom: var(--sp-2);
     line-height: 1.5;
   }
 
@@ -85,10 +85,8 @@ const { posts, showTags = false, timeline = false } = Astro.props;
   }
 
   .title {
-    font-size: 1.1rem;
+    font-size: 1.0625rem;
     font-weight: 500;
-    letter-spacing: 0.018em;
-    line-height: 1.45;
   }
 
   .title a {
@@ -111,13 +109,13 @@ const { posts, showTags = false, timeline = false } = Astro.props;
   }
 
   .excerpt {
-    margin-top: var(--sp-1);
+    margin-top: var(--sp-2);
     color: var(--muted);
     font-size: var(--fs-lead);
   }
 
   .tags {
-    margin-top: var(--sp-2);
+    margin-top: var(--sp-4);
   }
 
   .tags a {
@@ -133,7 +131,7 @@ const { posts, showTags = false, timeline = false } = Astro.props;
   /* --- timeline --- */
 
   .timeline {
-    gap: var(--sp-8);
+    gap: var(--sp-12);
   }
 
   .timeline .post {
@@ -152,14 +150,11 @@ const { posts, showTags = false, timeline = false } = Astro.props;
     grid-column: 1;
     grid-row: 1;
     margin-bottom: 0;
-    /* Shares the section label's line-height so the date and the title sit
-       on one baseline. */
-    line-height: var(--lh-body);
   }
 
   @media screen and (max-width: 680px) {
     .timeline {
-      gap: var(--sp-6);
+      gap: var(--sp-10);
     }
 
     .timeline .post {
@@ -173,8 +168,7 @@ const { posts, showTags = false, timeline = false } = Astro.props;
     .timeline .post > .date {
       grid-column: auto;
       grid-row: auto;
-      margin-bottom: var(--sp-1);
-      line-height: 1.5;
+      margin-bottom: var(--sp-2);
     }
   }
 </style>

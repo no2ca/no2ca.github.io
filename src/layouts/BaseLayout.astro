@@ -188,8 +188,10 @@ const gaId = (import.meta.env.PUBLIC_GA_ID?.trim() || "G-F3YRJ3XXWK").trim();
     font-weight: 400;
     background: var(--bg);
     color: var(--fg);
+    font-size: var(--fs-body);
     line-height: var(--lh-body);
-    letter-spacing: 0.012em;
+    /* A little tracking keeps a dense run of kanji from closing up. */
+    letter-spacing: 0.03em;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -197,7 +199,7 @@ const gaId = (import.meta.env.PUBLIC_GA_ID?.trim() || "G-F3YRJ3XXWK").trim();
   .container {
     max-width: var(--measure);
     margin: 0 auto;
-    padding: clamp(1rem, 3vw, 1.75rem) var(--gutter) 0;
+    padding: 0 var(--gutter);
   }
 
   .container:focus {

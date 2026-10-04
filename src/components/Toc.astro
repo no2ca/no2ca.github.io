@@ -28,7 +28,7 @@ const items = Astro.props.headings.filter(
 
 <style>
   .heading {
-    margin-bottom: var(--sp-2);
+    margin-bottom: var(--sp-3);
   }
 
   ol {
@@ -36,12 +36,12 @@ const items = Astro.props.headings.filter(
     padding: 0;
     list-style: none;
     display: grid;
-    gap: 0.1rem;
+    gap: var(--sp-1);
   }
 
   li {
     font-size: var(--fs-meta);
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   .d3 {

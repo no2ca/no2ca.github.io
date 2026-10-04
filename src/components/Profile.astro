@@ -29,7 +29,7 @@ const { myIcon, name, tagline, update } = Astro.props;
     grid-template-columns: var(--label-col) 1fr;
     gap: 0 var(--sp-6);
     align-items: center;
-    padding-block: var(--sp-10);
+    padding-block: var(--hero-space-top) var(--hero-space-bottom);
   }
 
   .avatar {
@@ -41,20 +41,18 @@ const { myIcon, name, tagline, update } = Astro.props;
   }
 
   h1 {
-    font-size: clamp(1.75rem, 5vw, 2.2rem);
+    font-size: clamp(1.6rem, 4.5vw, 2rem);
     font-weight: 400;
-    line-height: 1.18;
-    letter-spacing: 0.015em;
+    line-height: 1.2;
   }
 
   .tagline {
-    margin-top: var(--sp-2);
-    font-size: var(--fs-lead);
+    margin-top: var(--sp-3);
     text-wrap: pretty;
   }
 
   .updated {
-    margin-top: var(--sp-3);
+    margin-top: var(--sp-4);
   }
 
   @media screen and (max-width: 680px) {
@@ -62,8 +60,7 @@ const { myIcon, name, tagline, update } = Astro.props;
        beneath them: a profile card rather than a two-column sheet. */
     .profile {
       grid-template-columns: auto 1fr;
-      gap: var(--sp-3) var(--sp-4);
-      padding-block: var(--sp-8);
+      gap: var(--sp-4);
     }
 
     .avatar {
@@ -76,13 +73,17 @@ const { myIcon, name, tagline, update } = Astro.props;
     }
 
     h1 {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
     }
 
     .tagline,
     .updated {
       grid-column: 1 / -1;
       margin-top: 0;
+    }
+
+    .tagline {
+      margin-top: var(--sp-1);
     }
 
     .updated {
